@@ -1,28 +1,9 @@
-#include <Arduino.h>
-
-portMUX_TYPE synch = portMUX_INITIALIZER_UNLOCKED;
-
-constexpr uint8_t wavePin = 2;
-unsigned long timeStamp = 0;
-unsigned long nextTimeStamp = 0;
-unsigned long timePeriod = 0;
-unsigned long sumTime = 0;
-unsigned long speed = 0;
-uint8_t counter = 0;
-unsigned long timePeriodValues[32] = {0};
-unsigned long newTimePeriodValues[16] = {0};
-
-
-enum class states : uint8_t
-{
-  IDLE,
-  PRINT
-};
-
-volatile states status = states::IDLE;
+#include "GLOBALS.h"
+#include "Display.h"
 
 void IRAM_ATTR calculateValues() 
 {
+
   portENTER_CRITICAL_ISR(&synch);
 
   timeStamp = millis();
@@ -44,16 +25,22 @@ void IRAM_ATTR calculateValues()
   portEXIT_CRITICAL_ISR(&synch);
 }
 
-void setup() {
-  Serial.begin(115200);
+void setup()
+{ 
+  Serial.begin(9600);
 
   vTaskDelay(1000 / portTICK_PERIOD_MS);
 
+  oledBegin();
+
   pinMode(wavePin, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(wavePin), calculateValues, CHANGE);
+  pinMode(currentPin, INPUT);
 }
 
-void loop() {
+void loop()
+{
+  displayCurrent();    
 
   switch (status) 
   {
@@ -61,7 +48,6 @@ void loop() {
     for (int i = 0; i < 16; i++) 
     {
       sumTime += newTimePeriodValues[i];
-
     }
     timePeriod = (unsigned long)(sumTime / 16.0);
     speed = (unsigned long)(3750 / timePeriod); // (1000 * 60) / (time period * 16)
@@ -70,7 +56,10 @@ void loop() {
 
     // Serial.print("\nMotor Speed: ");
     Serial.print(speed);
-    Serial.print("+");
+    Serial.print(" ; ");
+
+    ltoa(speed, speedChar, 3); 
+    writeRPM(speedChar);
 
     
     sumTime = 0;
@@ -83,5 +72,35 @@ void loop() {
     break;
   }
 
-  // vTaskDelay(100 / portTICK_PERIOD_MS);
 }
+
+
+void displayCurrent()
+{
+  // vout is read 1000 Times for precision
+  for(int i = 0; i < 500; i++) 
+  {
+    vout = (vout + (resADC * analogRead(currentPin)));   
+    delay(1);
+  }
+  
+  // Get vout in mv
+  vout = vout /500;
+  // vout = resADC * analogRead(currentPin);
+  
+  // Convert vout into current using Scale Factor
+  current = (vout - zeroPoint)/ sensitivityFactor;      
+  if(current < 0) current = 0;             
+
+  // Serial.print("Vout = ");           
+  // Serial.print(vout,2); 
+  // Serial.print(" Volts");                            
+  // Serial.print("\t Current = ");                  
+  // Serial.print(current,2);
+  // Serial.println(" Amps");  
+
+  dtostrf(current, 5, 2, buff);
+  
+  writeCurrent(buff);      
+}
+
