@@ -28,7 +28,6 @@ class ACS712
   ACS712(int8_t=-1, double=3.3, double=4096, double=0.1);
   inline void begin() __attribute__((always_inline));
   inline double calculateCurrent() __attribute__((always_inline));
-  inline void displayVoltage() __attribute__((always_inline));
   inline void printCurrent() __attribute__((always_inline));
 };
 
@@ -64,21 +63,20 @@ double ACS712::calculateCurrent()
   // vout = resADC * analogRead(currentPin);
   
   // Convert vout into current using Scale Factor
-  current = (vout - zeroPoint)/ sensitivityFactor;      
+  current = (vout - zeroPoint)/ sensitivityFactor;    
+  current = current - floor(current)*0.02;  
   if(current < 0) current = 0; 
 
 
   return current;                
-}
+} 
 
 void ACS712::printCurrent()
 {
-  // Serial.print("Vout = ");           
-  // Serial.print(this->vout,2); 
-  // Serial.print(" Volts");                            
-  // Serial.print("\t Current = "); 
-  // Serial.print(calculateCurrent(),2);
-  // Serial.println(" Amps"); 
-
-  Serial.println(analogRead(this->currentPin));
+  Serial.print("Vout = ");           
+  Serial.print(this->vout,2); 
+  Serial.print(" Volts");                            
+  Serial.print("\t Current = "); 
+  Serial.print(calculateCurrent(),2);
+  Serial.println(" Amps"); 
 }

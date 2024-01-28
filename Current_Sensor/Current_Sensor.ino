@@ -1,35 +1,20 @@
-// Use only core 1 for demo purposes
-#if CONFIG_FREERTOS_UNICORE
-  static const BaseType_t app_cpu = 0;
-#else
-  static const BaseType_t app_cpu = 1;
-#endif
-
 #include "GLOBALS.h"
-
-
 
 void setup()
 { 
   Serial.begin(115200);
-
-  vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-
-  // pulseCalculator1.begin();
-  // pulseCalculator2.begin();
-
+  delay(1000);
+  OLEDFunctions::begin();
   ACS712Sensor.begin();
 
-  // Delete "setup and loop" task
-  // vTaskDelete(NULL);
+  memset(currentArr, 0, sizeof(currentArr));
+  // memset(voltageArr, 0, sizeof(voltageArr));
+  // memset(powerArr, 0, sizeof(powerArr));
 }
 
 void loop()
 {
-  //Code should not enter here
-  ACS712Sensor.printCurrent();
-
-  // vTaskDelay(500 / portTICK_PERIOD_MS);
+  dtostrf(ACS712Sensor.calculateCurrent(), 5, 2, currentArr);
+  OLEDFunctions::displayCurrent(currentArr);
 }
 

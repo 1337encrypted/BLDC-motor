@@ -16,35 +16,35 @@ private:
   volatile unsigned long timePeriod;
   volatile unsigned long speed;
 
+  int8_t wavePin;
+  uint8_t motorId;
+
   enum class BLDCstates : uint8_t {
     IDLE,
     PRINT
   };
   volatile BLDCstates status = BLDCstates::IDLE;
-  int8_t wavePin;
 
-  // Static wrapper function for interrupt
-  static BLDCPulseCalculator* instance;
+  
+  static BLDCPulseCalculator* instance;                                                               // Static wrapper function for interrupt
+
   static void IRAM_ATTR staticCalculateValuesWrapper();
-
-public:
-  inline BLDCPulseCalculator(int8_t wavePin = -1)  __attribute__((always_inline));
-  inline void begin()  __attribute__((always_inline));
-  inline void IRAM_ATTR calculateValues() __attribute__((always_inline));
+  inline void IRAM_ATTR calculateValuesInternal() __attribute__((always_inline));                     // Member function for interrupt handling
+  inline static void motorSpeedTask(void* pvParameters) __attribute__((always_inline));               // FreeRTOS task function for motor speed calculation
   inline void motorSpeed() __attribute__((always_inline));
 
-private:
-  // Member function for interrupt handling
-  void IRAM_ATTR calculateValuesInternal();
-
-  // FreeRTOS task function for motor speed calculation
-  static void motorSpeedTask(void* pvParameters);
+public:
+  inline BLDCPulseCalculator(int8_t wavePin = -1, uint8_t = -1)  __attribute__((always_inline));
+  inline void begin(const BaseType_t = 1)  __attribute__((always_inline));
 };
 
 // Initialize the static pointer to null
 BLDCPulseCalculator* BLDCPulseCalculator::instance = nullptr;
 
-BLDCPulseCalculator::BLDCPulseCalculator(int8_t wavePin) : wavePin(wavePin) {
+BLDCPulseCalculator::BLDCPulseCalculator(int8_t wavePin, uint8_t motorId) : 
+wavePin(wavePin),
+motorId(motorId)
+{
   timeStamp = 0;
   nextTimeStamp = 0;
   timePeriod = 0;
@@ -60,7 +60,7 @@ BLDCPulseCalculator::BLDCPulseCalculator(int8_t wavePin) : wavePin(wavePin) {
   instance = this;
 }
 
-void BLDCPulseCalculator::begin() {
+void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
   pinMode(this->wavePin, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(this->wavePin), staticCalculateValuesWrapper, CHANGE);
 
@@ -103,10 +103,6 @@ void IRAM_ATTR BLDCPulseCalculator::calculateValuesInternal() {
   portEXIT_CRITICAL_ISR(&synch);
 }
 
-void BLDCPulseCalculator::calculateValues() {
-  // Empty, to be defined as needed
-}
-
 void BLDCPulseCalculator::motorSpeed() {
   switch (status) {
     case BLDCstates::PRINT:
@@ -116,8 +112,11 @@ void BLDCPulseCalculator::motorSpeed() {
       timePeriod = (unsigned long)(sumTime / 16.0);
       speed = (unsigned long)(3750 / timePeriod);
 
-      Serial.print(speed);
-      Serial.println();
+      // Serial.print(speed);
+      // Serial.println();
+
+      ESP_LOGI(motorId, "\tSpeed %d", speed);
+
 
       sumTime = 0;
 
