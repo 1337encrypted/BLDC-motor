@@ -1,5 +1,6 @@
-#include "OLEDFunctions.h"
-#include "ACS712.h"
+#include "OLEDFunctions.hpp"
+#include "PC817A.hpp"
+#include "ACS712.hpp"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ACS712 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -10,8 +11,15 @@ constexpr double sensitivityFactor = 0.1;       // As its a 20Amp circuit
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Object Creation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-ACS712 ACS712Sensor(currentPin, vRef, resConvert, sensitivityFactor);
+ACS712 ammeter1(currentPin, vRef, resConvert, sensitivityFactor);
 
 char currentArr[5] = {0};
-// char voltageArr[5] = {0};
+char voltageArr[5] = {0};
 // char powerArr[5] = {0};
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PC817A ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+constexpr int8_t voltagePin = A1;
+constexpr double vGain = 18.2;
+
+PC817A voltMeter(voltagePin, vGain);

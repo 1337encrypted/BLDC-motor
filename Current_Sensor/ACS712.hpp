@@ -1,7 +1,8 @@
+//This module reads either AC or DC current
+
 #pragma once
 
-class ACS712
-{
+class ACS712{
   private:
   // Define the analog pin that the ACS712 current sensor module is connected to
   int8_t currentPin;                //4
@@ -27,7 +28,7 @@ class ACS712
   ACS712();
   ACS712(int8_t=-1, double=3.3, double=4096, double=0.1);
   inline void begin() __attribute__((always_inline));
-  inline double calculateCurrent() __attribute__((always_inline));
+  inline double readCurrent() __attribute__((always_inline));
   inline void printCurrent() __attribute__((always_inline));
 };
 
@@ -45,13 +46,11 @@ sensitivityFactor(sensitivityFactor)
   current = 0.0;
 }
 
-void ACS712::begin()
-{
+void ACS712::begin(){
   pinMode(currentPin, INPUT);
 }
 
-double ACS712::calculateCurrent()
-{
+double ACS712::readCurrent(){
   // vout is read 1000 Times for precision
   for(int i = 0; i < 1000; i++) 
   {
@@ -71,12 +70,11 @@ double ACS712::calculateCurrent()
   return current;                
 } 
 
-void ACS712::printCurrent()
-{
+void ACS712::printCurrent(){
   Serial.print("Vout = ");           
   Serial.print(this->vout,2); 
   Serial.print(" Volts");                            
   Serial.print("\t Current = "); 
-  Serial.print(calculateCurrent(),2);
+  Serial.print(readCurrent(),2);
   Serial.println(" Amps"); 
 }

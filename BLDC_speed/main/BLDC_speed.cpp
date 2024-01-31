@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "BLDCPulseCalculator.h"
+#include "BLDCPulseCalculator.hpp"
 
 // Use only core 1 for demo purposes
 #if CONFIG_FREERTOS_UNICORE
