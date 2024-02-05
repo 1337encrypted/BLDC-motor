@@ -10,7 +10,7 @@
 
 class BLDCPulseCalculator {
 private:
-  portMUX_TYPE synch = portMUX_INITIALIZER_UNLOCKED;
+  portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 
   gpio_num_t wavePin;
   uint8_t motorId;
@@ -31,12 +31,12 @@ private:
 
 public:
 
-  BLDCPulseCalculator(gpio_num_t wavePin = GPIO_NUM_NC, uint8_t motorId = -1);
-  void calculateValuesInternal(void);
-  void motorSpeed();
+  inline BLDCPulseCalculator(gpio_num_t wavePin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
+  inline void calculateValuesInternal(void) __attribute__((always_inline));
+  inline void motorSpeed() __attribute__((always_inline));
   
-  void begin(const BaseType_t = 1);
-  static void motorSpeedTask(void*);
+  inline void begin(const BaseType_t = 1) __attribute__((always_inline));
+  inline static void motorSpeedTask(void*) __attribute__((always_inline));
   static void staticCalculateValuesWrapper(void *);
 };
 
@@ -136,7 +136,7 @@ void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
 }
 
 void BLDCPulseCalculator::calculateValuesInternal() {
-  static portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+  // static portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
   portENTER_CRITICAL_ISR(&mux);
 
   static volatile uint8_t counter = 0;

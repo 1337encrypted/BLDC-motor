@@ -47,18 +47,18 @@ sensitivityFactor(sensitivityFactor)
 }
 
 void ACS712::begin(){
-  pinMode(currentPin, INPUT);
+  if(currentPin > 0)  pinMode(currentPin, INPUT);
 }
 
 double ACS712::readCurrent(){
   // vout is read 1000 Times for precision
-  for(int i = 0; i < 1000; i++) 
+  for(int i = 0; i < 100; i++) 
   {
-    vout = (vout + (resADC * analogRead(currentPin)));   
-    delay(1);
+    vout = (vout + (resADC * analogRead(currentPin)));
+    delayMicroseconds(100);
   }
   // Get vout in mv
-  vout = vout /1000;
+  vout = vout /100;
   // vout = resADC * analogRead(currentPin);
   
   // Convert vout into current using Scale Factor
@@ -71,10 +71,10 @@ double ACS712::readCurrent(){
 } 
 
 void ACS712::printCurrent(){
-  Serial.print("Vout = ");           
+  Serial.print("\t Current Sensor Vout = ");           
   Serial.print(this->vout,2); 
   Serial.print(" Volts");                            
   Serial.print("\t Current = "); 
   Serial.print(readCurrent(),2);
-  Serial.println(" Amps"); 
+  Serial.print(" Amps"); 
 }

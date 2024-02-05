@@ -10,7 +10,7 @@
 
 
 // Motor1 
-constexpr gpio_num_t wavePin1 = GPIO_NUM_2;
+constexpr gpio_num_t wavePin1 = GPIO_NUM_15;
 constexpr uint8_t motorId1 = 1;
 
 /* Object creation */
