@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "BLDCPulseCalculator.hpp"
+#include <U8g2lib.h>
+
 
 // Use only core 1 for demo purposes
 #if CONFIG_FREERTOS_UNICORE
@@ -8,6 +10,7 @@
   static const BaseType_t app_cpu = 1;
 #endif
 
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C menuList(U8G2_R0);   
 
 // Motor1 
 constexpr gpio_num_t wavePin1 = GPIO_NUM_15;
@@ -24,3 +27,6 @@ extern "C"
     PMSMMotor1.begin(app_cpu);
   }
 }
+
+
+

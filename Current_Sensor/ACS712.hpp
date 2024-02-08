@@ -52,13 +52,13 @@ void ACS712::begin(){
 
 double ACS712::readCurrent(){
   // vout is read 1000 Times for precision
-  for(int i = 0; i < 100; i++) 
+  for(int i = 0; i < 1000; i++) 
   {
     vout = (vout + (resADC * analogRead(currentPin)));
-    delayMicroseconds(100);
+    delayMicroseconds(1000);
   }
   // Get vout in mv
-  vout = vout /100;
+  vout = vout /1000;
   // vout = resADC * analogRead(currentPin);
   
   // Convert vout into current using Scale Factor

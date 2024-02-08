@@ -8,8 +8,7 @@
     },
     "idf.espIdfPath": "/Users/shady/esp/esp-idf",
     "idf.openOcdConfigs": [
-        "interface/ftdi/esp32_devkitj_v1.cfg",
-        "target/esp32.cfg"
+        "board/esp32-wrover-kit-3.3v.cfg"
     ],
     "idf.port": "/dev/cu.usbserial-0001",
     "idf.pythonBinPath": "/Users/shady/.espressif/python_env/idf5.0_py3.10_env/bin/python",

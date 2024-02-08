@@ -7,6 +7,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 #include <freertos/task.h>
+#include "oledFunctions.hpp"
 
 class BLDCPulseCalculator {
 private:
@@ -34,6 +35,7 @@ public:
   inline BLDCPulseCalculator(gpio_num_t wavePin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
   inline void calculateValuesInternal(void) __attribute__((always_inline));
   inline void motorSpeed() __attribute__((always_inline));
+  inline void printSpeed() __attribute__((always_inline));;
   
   inline void begin(const BaseType_t = 1) __attribute__((always_inline));
   static inline void motorSpeedTask(void*) __attribute__((always_inline));
@@ -160,6 +162,17 @@ void BLDCPulseCalculator::calculateValuesInternal() {
   portEXIT_CRITICAL_ISR(&mux);
 }
 
+void BLDCPulseCalculator::printSpeed() {
+    // Allocate memory for tempSpeed
+    char tempSpeed[6]; // Assuming the maximum size of your speed won't exceed 5 digits + null terminator
+
+    // Convert speed to string and store it in tempSpeed
+    itoa(this->speed, tempSpeed, 10); // Using base 10
+
+    // Display the speed
+    OLEDFunctions::displayRPM(tempSpeed, this->motorId);
+}
+
 void BLDCPulseCalculator::motorSpeed() {
   uint32_t sumTime = 0;
 
@@ -173,7 +186,9 @@ void BLDCPulseCalculator::motorSpeed() {
       // speed = (uint16_t)(3750 / timePeriod);
 
       speed = static_cast<uint16_t>(60000 / sumTime);
-      ESP_LOGI("MOTOR", "Speed %u", speed);
+      // ESP_LOGI("MOTOR", "Speed %u", speed);
+      // Serial.println(speed);
+      printSpeed();
       sumTime = 0;
       status = BLDCstates::IDLE;
       break;
