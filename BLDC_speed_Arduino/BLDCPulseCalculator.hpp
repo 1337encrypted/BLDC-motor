@@ -16,10 +16,15 @@ private:
   gpio_num_t wavePin;
   uint8_t motorId;
 
+  volatile uint8_t counter;
+  volatile unsigned long nextTimeStamp;
+  volatile unsigned long timeStamp;
+
   volatile uint32_t timePeriodValues[32];
   volatile uint32_t newTimePeriodValues[16];
 
   volatile uint16_t speed;
+
 
   enum class BLDCstates : uint8_t {
     IDLE,
@@ -32,10 +37,11 @@ private:
 
 public:
 
+
+
   inline BLDCPulseCalculator(gpio_num_t wavePin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
   inline void calculateValuesInternal(void) __attribute__((always_inline));
   inline void motorSpeed() __attribute__((always_inline));
-  inline void printSpeed() __attribute__((always_inline));;
   
   inline void begin(const BaseType_t = 1) __attribute__((always_inline));
   static inline void motorSpeedTask(void*) __attribute__((always_inline));
@@ -45,13 +51,16 @@ public:
 // BLDCPulseCalculator* BLDCPulseCalculator::instance = nullptr;
 
 BLDCPulseCalculator::BLDCPulseCalculator(gpio_num_t wavePin, uint8_t motorId) :
-  wavePin(wavePin), 
-  motorId(motorId),
-  speed(0)
+wavePin(wavePin), 
+motorId(motorId),
+speed(0)
 {
   memset((void *)(timePeriodValues), 0, sizeof(timePeriodValues));
   memset((void *)(newTimePeriodValues), 0, sizeof(newTimePeriodValues));
 
+  this->counter=0;
+  this->nextTimeStamp=0;
+  this->timeStamp=0;
   // instance = this;
 }
 
@@ -141,10 +150,6 @@ void BLDCPulseCalculator::calculateValuesInternal() {
   // static portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
   portENTER_CRITICAL_ISR(&mux);
 
-  static volatile uint8_t counter = 0;
-  static volatile unsigned long nextTimeStamp;
-  volatile unsigned long timeStamp;
-
   timeStamp = esp_timer_get_time() / 1000;  // Convert to milliseconds
   timePeriodValues[counter] = static_cast<uint32_t>(timeStamp - nextTimeStamp);
   counter = counter + 1;
@@ -162,16 +167,6 @@ void BLDCPulseCalculator::calculateValuesInternal() {
   portEXIT_CRITICAL_ISR(&mux);
 }
 
-void BLDCPulseCalculator::printSpeed() {
-    // Allocate memory for tempSpeed
-    char tempSpeed[6]; // Assuming the maximum size of your speed won't exceed 5 digits + null terminator
-
-    // Convert speed to string and store it in tempSpeed
-    itoa(this->speed, tempSpeed, 10); // Using base 10
-
-    // Display the speed
-    OLEDFunctions::displayRPM(tempSpeed, this->motorId);
-}
 
 void BLDCPulseCalculator::motorSpeed() {
   uint32_t sumTime = 0;
@@ -188,7 +183,9 @@ void BLDCPulseCalculator::motorSpeed() {
       speed = static_cast<uint16_t>(60000 / sumTime);
       // ESP_LOGI("MOTOR", "Speed %u", speed);
       // Serial.println(speed);
-      printSpeed();
+
+      OLEDFunctions::displayRPM(speed, motorId);
+
       sumTime = 0;
       status = BLDCstates::IDLE;
       break;
