@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include "uart.hpp"
 #include "BLDCPulseCalculator.hpp"
 #include "oledFunctions.hpp"
-// #include "motorSynchronization.hpp"
 #include "pwmGenerator.hpp"
 #include <U8g2lib.h>
+
 
 
 // Use only core 1 for demo purposes

@@ -184,7 +184,15 @@ void BLDCPulseCalculator::motorSpeed() {
       // ESP_LOGI("MOTOR", "Speed %u", speed);
       // Serial.println(speed);
 
-      OLEDFunctions::displayRPM(speed, motorId);
+      // OLEDFunctions::displayRPM(speed, motorId);
+      if(motorId == 1)
+      {
+        itoa(speed, OLEDFunctions::oledSpeed1, 10); // Using base 10
+      }
+      else
+      {
+        itoa(speed, OLEDFunctions::oledSpeed2, 10); // Using base 10
+      }
 
       sumTime = 0;
       status = BLDCstates::IDLE;

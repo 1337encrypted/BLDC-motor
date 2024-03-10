@@ -1,7 +1,7 @@
 #include "GLOBALS.hpp"
 
 void setup() {
-  // Serial.begin(115200);
+  Serial.begin(115200);
 
   PMSMMotor1.begin(app_cpu0);
   motor1.begin(app_cpu0);
@@ -9,7 +9,10 @@ void setup() {
   PMSMMotor2.begin(app_cpu1);
   motor2.begin(app_cpu1); 
 
-  OLEDFunctions::begin();
+  uartInit(app_cpu1);
+
+  OLEDFunctions::begin(app_cpu1);
+
   vTaskDelay(100 / portTICK_PERIOD_MS);
 
   vTaskDelete(NULL);
