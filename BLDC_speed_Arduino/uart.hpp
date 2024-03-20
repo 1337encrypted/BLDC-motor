@@ -1,165 +1,142 @@
+#pragma once
+
 #include <stdio.h>
+#include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "driver/gpio.h"
 #include "sdkconfig.h"
 #include "esp_log.h"
-#include "oledFunctions.hpp"
 
-#define TXD 4
-#define RXD 5
-#define RTS (UART_PIN_NO_CHANGE)
-#define CTS (UART_PIN_NO_CHANGE)
+constexpr uint8_t TXD = 4;
+constexpr uint8_t RXD = 5;
+constexpr uint8_t RTS = (UART_PIN_NO_CHANGE);
+constexpr uint8_t CTS = (UART_PIN_NO_CHANGE);
 
-#define UartPortNum 2
-#define baudRate 115200
-#define stackSize 2048
+constexpr int UART_BAUD_RATE = 115200;
 
-
-const uint16_t BUF_SIZE = (1024);
-
-// char OLEDFunctions::currentArr1[6];
-// char OLEDFunctions::currentArr2[6];
-// char OLEDFunctions::voltageArr1[6];
-// char OLEDFunctions::powerArr1[6];
-// char OLEDFunctions::powerArr2[6];
-
-//Prototype
-void extractData();
-void printReceivedData();
-
-//FreeRtos functions
-static void receiveDataTask(void *);
+constexpr uart_port_t PORT_NUM = UART_NUM_2;
+constexpr int STACK_SIZE = 2048;
 
 
-void extractData(char *data)
-{
-  // Serial.println(data);
+class HardwareUart {
+private:
+    const int uart_buffer_size;
+    QueueHandle_t uart_queue;
+    int length;
+    const char* test_str;
 
-  memset(OLEDFunctions::currentArr1, 0, 6);
-  memset(OLEDFunctions::currentArr2, 0, 6);
-  memset(OLEDFunctions::voltageArr1, 0, 6);
-  memset(OLEDFunctions::powerArr1, 0, 6);
-  memset(OLEDFunctions::powerArr2, 0, 6);
+    // Define the structure for the motor characteristics data
+    typedef struct MotorCharacteristicsData{
+        float current1;
+        float current2;
+        float voltage1;
+    }MotorCharacteristicsData;
 
+    MotorCharacteristicsData received_data;
+    
+public:
+    HardwareUart(int = 1024, const char* = "S\n");
+    void begin(const BaseType_t = 1);
+    void sendData();
+    void receiveData();
+    void printIncomingData(size_t);
 
-  uint8_t index = 0;
-  int j=0,i=0;
+    //FreeRTOS task
+    static void uartTask(void *);
 
-  while(data[i] != '\0')
-  {
-    if(data[i] != ',')
-    {
-      switch(index)
-      {
-        case 0:
-          OLEDFunctions::currentArr1[j++] = data[i];
-          break;
+    TaskHandle_t xUartHandle;
+};
 
-        case 1:
-          OLEDFunctions::currentArr2[j++] = data[i];
-          break;
+HardwareUart::HardwareUart(int buffer_size, const char* str) : 
+uart_buffer_size(buffer_size), 
+length(0), 
+test_str(str),
+received_data{0.00, 0.00, 0.00} {
 
-        case 2:
-          OLEDFunctions::voltageArr1[j++] = data[i];
-          break;
-
-        case 3:
-          OLEDFunctions::powerArr1[j++] = data[i];
-          break;
-
-        case 4:
-          OLEDFunctions::powerArr2[j++] = data[i];
-          break;
-      }
-    }
-    else
-    {
-      switch(index)
-      {
-        case 0:
-        OLEDFunctions::currentArr1[j] = '\0';
-        break;
-
-        case 1:
-        OLEDFunctions::currentArr2[j] = '\0';
-        break;
-
-        case 2:
-        OLEDFunctions::voltageArr1[j] = '\0';
-        break;
-
-        case 3:
-        OLEDFunctions::powerArr1[j] = '\0';
-        break;
-
-        case 4:
-        OLEDFunctions::powerArr1[j] = '\0';
-        break;
-      }
-      index++;
-      j=0;
-    }
-    i++;
-  }
-}
-
-void uartInit(const BaseType_t app_cpu1)
-{
-  /* Configure parameters of an UART driver,
-    * communication pins and install the driver */
     uart_config_t uart_config = {
-        .baud_rate = baudRate,
+        .baud_rate = UART_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
         .parity    = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .source_clk = UART_SCLK_DEFAULT,
+        .rx_flow_ctrl_thresh = UART_SCLK_APB,
+        .source_clk = UART_SCLK_DEFAULT
     };
-int intr_alloc_flags = 0;
 
-#if CONFIG_UART_ISR_IN_IRAM
-    intr_alloc_flags = ESP_INTR_FLAG_IRAM;
-#endif
+    ESP_ERROR_CHECK(uart_param_config(PORT_NUM, &uart_config));
+    ESP_ERROR_CHECK(uart_set_pin(PORT_NUM, TXD, RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    ESP_ERROR_CHECK(uart_driver_install(PORT_NUM, uart_buffer_size, uart_buffer_size, 10, &uart_queue, 0));
 
-  ESP_ERROR_CHECK(uart_driver_install(UartPortNum, BUF_SIZE * 2, 0, 0, NULL, intr_alloc_flags));
-  ESP_ERROR_CHECK(uart_param_config(UartPortNum, &uart_config));
-  ESP_ERROR_CHECK(uart_set_pin(UartPortNum, TXD, RXD, RTS, CTS));
-
-  xTaskCreatePinnedToCore(&receiveDataTask, "uart_echo_task", stackSize, NULL, 10, NULL, app_cpu1);
+    xUartHandle = nullptr;
 }
 
-static void receiveDataTask(void *arg)
-{
-    // Configure a temporary buffer for the incoming data
-    char data[1024];
+void HardwareUart::begin(const BaseType_t app_cpu) {
+    if(!xUartHandle) {
+        BaseType_t result = xTaskCreatePinnedToCore(
+            uartTask,
+            "uart_task",
+            STACK_SIZE,
+            this,
+            2,
+            &xUartHandle,
+            app_cpu
+        );
 
-    while (1)
-    {
-      // Read data from the UART
-      int len = uart_read_bytes(UartPortNum, data, (BUF_SIZE - 1), 500 / portTICK_PERIOD_MS);
-      // Write data back to the UART
-      // uart_write_bytes(UartPortNum, (const char *) data, len);
-      if (len) 
-      {
-          data[len] = '\0';
-          // Serial.println(data);
-          // ESP_LOGI("UART TEST", "Recv str: %s", (char *) data);
-          extractData(data);
-          // printReceivedData();
-          OLEDFunctions::printUartData();
-      }
-      // vTaskDelay(500 / portTICK_PERIOD_MS);
+        if (result == pdPASS){
+            ESP_LOGI("UARTBEGIN", "Created the UartTask successfully");
+        } else {
+            ESP_LOGI("UARTBEGIN", "Failed to create the UartTask task");
+        }
+    } else {
+        ESP_LOGI("UARTBEGIN", "UartTask already created");
     }
 }
 
+void HardwareUart::sendData() {
+    uart_write_bytes(PORT_NUM, test_str, strlen(test_str));
+}
 
-void printReceivedData()
-{
-  Serial.println(OLEDFunctions::currentArr1);
-  Serial.println(OLEDFunctions::currentArr2);
-  Serial.println(OLEDFunctions::voltageArr1);
-  Serial.println(OLEDFunctions::powerArr1);
-  Serial.println(OLEDFunctions::powerArr2);
+
+void HardwareUart::receiveData() {
+
+    static const char* TAG = "receiveData"; // Define TAG here
+    
+    // Define a buffer to store received data
+    uint8_t data_buffer[sizeof(MotorCharacteristicsData)];
+
+    // Read the data from the UART buffer
+    size_t data_length = uart_read_bytes(PORT_NUM, data_buffer, sizeof(data_buffer), 1500 / portTICK_PERIOD_MS);
+
+    if (data_length == sizeof(MotorCharacteristicsData)) {  
+        memcpy(&received_data, data_buffer, sizeof(MotorCharacteristicsData)); // Deserialize the received bytes into a MotorCharacteristicsData struct
+        // printIncomingData(data_length);
+    } else {
+        ESP_LOGW(TAG, "Received data size does not match struct size");
+    }
+}
+
+void HardwareUart::printIncomingData(size_t data_length) {
+
+        static const char* TAG = "printIncomingData"; // Define TAG here
+
+        ESP_LOGI(TAG, "Incoming data Length: %d", data_length);
+        ESP_LOGI(TAG, "Data Structure Length: %d", sizeof(MotorCharacteristicsData));
+
+        //Now you can access the individual members of the received_data struct
+        ESP_LOGI(TAG, "Received current1: %f", received_data.current1);
+        ESP_LOGI(TAG, "Received current2: %f", received_data.current2);
+        ESP_LOGI(TAG, "Received voltage1: %f", received_data.voltage1);
+} 
+
+
+
+void HardwareUart::uartTask(void *arg) {
+    HardwareUart *serial = static_cast<HardwareUart*>(arg);
+
+    while (1) {
+        serial->sendData();
+        serial->receiveData();
+    }
 }

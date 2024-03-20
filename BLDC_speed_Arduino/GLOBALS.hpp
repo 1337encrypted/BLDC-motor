@@ -35,3 +35,6 @@ BLDCPulseCalculator PMSMMotor2(wavePin2, motorId2);
 // motorSynchronization motor1(motorPwm1);
 PwmGenerator motor1(motorPwm1, frequency, resolution);
 PwmGenerator motor2(motorPwm2, frequency, resolution);
+
+// Uart object
+HardwareUart serial;

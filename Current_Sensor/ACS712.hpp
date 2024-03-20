@@ -52,13 +52,13 @@ void ACS712::begin(){
 
 double ACS712::readCurrent(){
   // vout is read 1000 Times for precision
-  for(int i = 0; i < 1000; i++) 
+  for(int i = 0; i < 500; i++) 
   {
     vout = (vout + (resADC * analogRead(currentPin)));
-    delayMicroseconds(1000);
+    delayMicroseconds(500);
   }
   // Get vout in mv
-  vout = vout /1000;
+  vout = vout /500;
   // vout = resADC * analogRead(currentPin);
   
   // Convert vout into current using Scale Factor
@@ -69,6 +69,44 @@ double ACS712::readCurrent(){
 
   return current;                
 } 
+
+
+// double ACS712::readCurrent() {
+//     static unsigned long previousMillis = 0;
+//     static int count = 0;
+//     static double voutSum = 0.0;
+
+//     unsigned long currentMillis = millis();
+
+//     // Perform the operation every 500 microseconds
+//     if (currentMillis - previousMillis >= 500) {
+//         previousMillis = currentMillis;
+
+//         // Accumulate vout readings
+//         voutSum += (resADC * analogRead(currentPin));
+
+//         // Increment the count
+//         count++;
+
+//         // If 500 readings are accumulated, calculate current
+//         if (count >= 500) {
+//             // Calculate average vout
+//             double voutAverage = voutSum / count;
+
+//             // Reset voutSum and count for the next iteration
+//             voutSum = 0.0;
+//             count = 0;
+
+//             // Convert vout into current using Scale Factor
+//             double current = (voutAverage - zeroPoint) / sensitivityFactor;
+//             current = current - floor(current) * 0.02;
+//             if (current < 0) current = 0;
+
+//             return current;
+//         }
+//     }
+// }
+
 
 void ACS712::printCurrent(){
   Serial.print("\t Current Sensor Vout = ");           

@@ -3,13 +3,14 @@
 void setup() {
   Serial.begin(115200);
 
+  serial.begin(app_cpu1);
+  
   PMSMMotor1.begin(app_cpu0);
   motor1.begin(app_cpu0);
 
   PMSMMotor2.begin(app_cpu1);
   motor2.begin(app_cpu1); 
 
-  uartInit(app_cpu1);
 
   OLEDFunctions::begin(app_cpu1);
 

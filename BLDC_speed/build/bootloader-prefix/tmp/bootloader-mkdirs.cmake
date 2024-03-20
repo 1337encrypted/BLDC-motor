@@ -5,18 +5,18 @@ cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
   "/Users/shady/esp/esp-idf/components/bootloader/subproject"
-  "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader"
-  "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix"
-  "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/tmp"
-  "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp"
-  "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src"
-  "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp"
+  "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader"
+  "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix"
+  "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/tmp"
+  "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp"
+  "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src"
+  "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()
