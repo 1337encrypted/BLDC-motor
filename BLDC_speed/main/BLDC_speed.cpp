@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "BLDCPulseCalculator.hpp"
-#include <U8g2lib.h>
+#include "GLOBALS.hpp"
 
 
 // Use only core 1 for demo purposes

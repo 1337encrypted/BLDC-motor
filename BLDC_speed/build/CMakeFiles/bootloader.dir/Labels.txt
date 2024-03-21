@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/CMakeFiles/bootloader
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/CMakeFiles/bootloader.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/CMakeFiles/bootloader-complete.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-/Users/shady/Desktop/BLDC_speed/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/CMakeFiles/bootloader
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/CMakeFiles/bootloader.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/CMakeFiles/bootloader-complete.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

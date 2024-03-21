@@ -55,7 +55,7 @@ double ACS712::readCurrent(){
   for(int i = 0; i < 1000; i++) 
   {
     vout = (vout + (resADC * analogRead(currentPin)));
-    delayMicroseconds(1000);
+    delayMicroseconds(100);
   }
   // Get vout in mv
   vout = vout /1000;

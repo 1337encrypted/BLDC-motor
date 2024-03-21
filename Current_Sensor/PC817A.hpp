@@ -5,22 +5,21 @@
 class PC817A{
   private:
   int8_t voltagePin;
-  double vGain, vout, resADC;
+  double vout, resADC;
 
   public:
-  inline PC817A(int8_t = -1, double vGain = -1) __attribute__((always_inline));
+  inline PC817A(int8_t = -1, double resADC = 0.0732) __attribute__((always_inline));
   inline void begin() __attribute__((always_inline));
   inline double readVoltage() __attribute__((always_inline));
   inline void printVoltage() __attribute__((always_inline));
 };
 
 
-PC817A::PC817A(int8_t voltagePin, double vGain) :
+PC817A::PC817A(int8_t voltagePin, double resADC) :
 voltagePin(voltagePin),
-vGain(vGain)
+resADC(resADC)
 {
   vout = 0;
-  resADC = 0.0732;
 }
 
 void PC817A::begin(){
@@ -28,8 +27,6 @@ void PC817A::begin(){
 }
 
 double PC817A::readVoltage(){  
-  // 1024 - analogRead(voltagePin)) * 0.00488 * vGain;
-  // return 0.0732*analogRead(voltagePin);
   for(int i = 0; i < 100; i++) 
   {
     vout = (vout + (resADC * analogRead(voltagePin)));

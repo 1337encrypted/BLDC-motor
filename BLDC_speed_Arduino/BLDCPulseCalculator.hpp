@@ -184,13 +184,30 @@ void BLDCPulseCalculator::motorSpeed() {
       // ESP_LOGI("MOTOR", "Speed %u", speed);
       // Serial.println(speed);
 
-      OLEDFunctions::displayRPM(speed, motorId);
+      // OLEDFunctions::displayRPM(speed, motorId);
+      if(motorId == 1)
+      {
+        itoa(speed, OLEDFunctions::oledSpeed1, 10); // Using base 10
+      }
+      else
+      {
+        itoa(speed, OLEDFunctions::oledSpeed2, 10); // Using base 10
+      }
 
       sumTime = 0;
       status = BLDCstates::IDLE;
       break;
 
     case BLDCstates::IDLE:
+      // This is to set the speed to 0 when the wheel is not moving
+      if(((esp_timer_get_time() / 1000) - nextTimeStamp) > 2000)
+      {
+        speed = 0;
+        if(motorId == 1)
+          itoa(speed, OLEDFunctions::oledSpeed1, 10); // Using base 10
+        else
+          itoa(speed, OLEDFunctions::oledSpeed2, 10); // Using base 10
+      }
       break;
   }
 }
