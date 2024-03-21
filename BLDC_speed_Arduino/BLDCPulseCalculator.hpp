@@ -199,6 +199,15 @@ void BLDCPulseCalculator::motorSpeed() {
       break;
 
     case BLDCstates::IDLE:
+      // This is to set the speed to 0 when the wheel is not moving
+      if(((esp_timer_get_time() / 1000) - nextTimeStamp) > 2000)
+      {
+        speed = 0;
+        if(motorId == 1)
+          itoa(speed, OLEDFunctions::oledSpeed1, 10); // Using base 10
+        else
+          itoa(speed, OLEDFunctions::oledSpeed2, 10); // Using base 10
+      }
       break;
   }
 }

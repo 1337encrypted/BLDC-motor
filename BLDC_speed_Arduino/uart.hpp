@@ -8,6 +8,7 @@
 #include "driver/gpio.h"
 #include "sdkconfig.h"
 #include "esp_log.h"
+#include "oledFunctions.hpp"
 
 constexpr uint8_t TXD = 4;
 constexpr uint8_t RXD = 5;
@@ -100,43 +101,55 @@ void HardwareUart::sendData() {
 
 
 void HardwareUart::receiveData() {
+  static const char* TAG = "receiveData"; // Define TAG here
+  
+  // Define a buffer to store received data
+  uint8_t data_buffer[sizeof(MotorCharacteristicsData)];
 
-    static const char* TAG = "receiveData"; // Define TAG here
-    
-    // Define a buffer to store received data
-    uint8_t data_buffer[sizeof(MotorCharacteristicsData)];
+  // Read the data from the UART buffer
+  size_t data_length = uart_read_bytes(PORT_NUM, data_buffer, sizeof(data_buffer), 300 / portTICK_PERIOD_MS);
 
-    // Read the data from the UART buffer
-    size_t data_length = uart_read_bytes(PORT_NUM, data_buffer, sizeof(data_buffer), 1500 / portTICK_PERIOD_MS);
+  if (data_length == sizeof(MotorCharacteristicsData)) {  
+    memcpy(&received_data, data_buffer, sizeof(MotorCharacteristicsData)); // Deserialize the received bytes into a MotorCharacteristicsData struct
+    // printIncomingData(data_length);
 
-    if (data_length == sizeof(MotorCharacteristicsData)) {  
-        memcpy(&received_data, data_buffer, sizeof(MotorCharacteristicsData)); // Deserialize the received bytes into a MotorCharacteristicsData struct
-        // printIncomingData(data_length);
-    } else {
-        ESP_LOGW(TAG, "Received data size does not match struct size");
-    }
+    snprintf(OLEDFunctions::currentArr1, sizeof(OLEDFunctions::currentArr1), "%0.2f", received_data.current1);
+    snprintf(OLEDFunctions::currentArr2, sizeof(OLEDFunctions::currentArr2), "%0.2f", received_data.current2);
+    snprintf(OLEDFunctions::voltageArr1, sizeof(OLEDFunctions::voltageArr1), "%0.2f", received_data.voltage1);
+
+  } else {
+    ESP_LOGW(TAG, "Received data size does not match struct size");
+  }
 }
 
 void HardwareUart::printIncomingData(size_t data_length) {
 
-        static const char* TAG = "printIncomingData"; // Define TAG here
+  // static const char* TAG = "printIncomingData"; // Define TAG here
 
-        ESP_LOGI(TAG, "Incoming data Length: %d", data_length);
-        ESP_LOGI(TAG, "Data Structure Length: %d", sizeof(MotorCharacteristicsData));
+  // ESP_LOGI(TAG, "Incoming data Length: %d", data_length);
+  // ESP_LOGI(TAG, "Data Structure Length: %d", sizeof(MotorCharacteristicsData));
 
-        //Now you can access the individual members of the received_data struct
-        ESP_LOGI(TAG, "Received current1: %f", received_data.current1);
-        ESP_LOGI(TAG, "Received current2: %f", received_data.current2);
-        ESP_LOGI(TAG, "Received voltage1: %f", received_data.voltage1);
+  // //Now you can access the individual members of the received_data struct
+  // ESP_LOGI(TAG, "Received current1: %f", received_data.current1);
+  // ESP_LOGI(TAG, "Received current2: %f", received_data.current2);
+  // ESP_LOGI(TAG, "Received voltage1: %f", received_data.voltage1);
+  
+  Serial.println(data_length);
+  Serial.println(sizeof(MotorCharacteristicsData));
+
+  //Now you can access the individual members of the received_data struct
+  Serial.println(received_data.current1);
+  Serial.println(received_data.current2);
+  Serial.println(received_data.voltage1);
 } 
 
 
 
 void HardwareUart::uartTask(void *arg) {
-    HardwareUart *serial = static_cast<HardwareUart*>(arg);
+  HardwareUart *serial = static_cast<HardwareUart*>(arg);
 
-    while (1) {
-        serial->sendData();
-        serial->receiveData();
-    }
+  while (1) {
+    serial->sendData();
+    serial->receiveData();
+  }
 }

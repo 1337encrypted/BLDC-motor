@@ -16,34 +16,24 @@ constexpr double sensitivityFactor = 0.1;       // As its a 20Amp circuit
 
 constexpr int8_t voltagePin1 = A0;
 // constexpr int8_t voltagePin2 = A2;
-constexpr double vGain = 18.2;
+constexpr double resADC = 0.0717; //0.0732
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BUZZER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 constexpr int8_t buzzPin = 3;
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MISCELLANEOUS VALUES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MISCELLANEOUS VALUES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// char currentArr1[5] = {0};
-// char currentArr2[5] = {0};
-// char voltageArr1[5] = {0};
-// // char voltageArr2[5] = {0};
-// char powerArr1[5] = {0};
-// char powerArr2[5] = {0};
 
 double current1 = 0;
 double current2 = 0;
 double voltage1 = 0;
-// double voltage2 = 0;
-// double power1 = 0;
-// double power2 = 0;
 
-// char sendBuffer[40];
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Object Creation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 ACS712 ammeter1(currentPin1, vRef, resConvert, sensitivityFactor);
 ACS712 ammeter2(currentPin2, vRef, resConvert, sensitivityFactor);
-PC817A voltMeter1(voltagePin1, vGain);
-// PC817A voltMeter2(voltagePin2, vGain);
+PC817A voltMeter1(voltagePin1, resADC);
+// PC817A voltMeter2(voltagePin2, resADC);
 buzzer buzz(buzzPin);
