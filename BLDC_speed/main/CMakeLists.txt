@@ -1,18 +1,21 @@
 idf_component_register(
     SRCS
+        "GLOBALS.hpp"
         "BLDC_speed.cpp"
-        "BLDCPulseCalculator.cpp"
-        "PwmGenerator.cpp"
-        "Uart.cpp"
-        # "BLDCPulseCalculator.hpp"
-        # "PwmGenerator.hpp"
-        # "Uart.hpp"
-        # "OLEDFunction.hpp"
-        # "U8g2lib.cpp"
-        # "U8x8lib.cpp"
+        "BLDCPulseCalculator/BLDCPulseCalculator.cpp"
+        "Uart/Uart.cpp"
+        "U8g2lib.cpp"
+        "U8x8lib.cpp"
+        "OLEDFunction.hpp"
     INCLUDE_DIRS 
         "."
-        # "/Users/shady/Documents/Arduino/libraries/U8g2/"
+        "BLDCPulseCalculator"
+        "Uart"
+
     REQUIRES
-        "driver"
+        "driver" 
+        "freertos"
+        "u8g2"
+        "esp_timer"
 )
+

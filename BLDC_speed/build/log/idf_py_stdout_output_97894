@@ -1,0 +1,19 @@
+[1/11] Performing build step for 'bootloader'
+[1/1] cd /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/esp-idf/esptool_py && /Users/shady/.espressif/python_env/idf5.2_py3.10_env/bin/python /Users/shady/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/bootloader.bin
+Bootloader binary size 0x6860 bytes. 0x7a0 bytes (7%) free.
+[2/11] No install step for 'bootloader'
+[3/11] Completed 'bootloader'
+[4/11] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/BLDC_speed.cpp.obj
+[5/11] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/BLDCPulseCalculator/BLDCPulseCalculator.cpp.obj
+[6/11] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/Uart/Uart.cpp.obj
+[7/11] Linking C static library esp-idf/main/libmain.a
+[8/11] Generating ld/sections.ld
+[9/11] Linking CXX executable BLDC_speed.elf
+[10/11] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32 image...
+Merged 2 ELF sections
+Successfully created esp32 image.
+Generated /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/BLDC_speed.bin
+[11/11] cd /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/esp-idf/esptool_py && /Users/shady/.espressif/python_env/idf5.2_py3.10_env/bin/python /Users/shady/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/partition_table/partition-table.bin /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/BLDC_speed.bin
+BLDC_speed.bin binary size 0x31f70 bytes. Smallest app partition is 0x100000 bytes. 0xce090 bytes (80%) free.

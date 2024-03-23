@@ -28,6 +28,9 @@ const uint8_t resolution = 8;        // PWM resolution (8-bit)
 constexpr uint8_t motorId1 = 1;
 constexpr uint8_t motorId2 = 2;
 
+constexpr uint8_t relayPin1 = 18;
+constexpr uint8_t relayPin2 = 17;
+
 /* Object creation */
 BLDCPulseCalculator PMSMMotor1(wavePin1, motorId1);
 BLDCPulseCalculator PMSMMotor2(wavePin2, motorId2);
@@ -38,3 +41,5 @@ PwmGenerator motor2(motorPwm2, frequency, resolution);
 
 // Uart object
 HardwareUart serial;
+
+char data[40];

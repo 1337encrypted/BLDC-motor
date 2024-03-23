@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "BLDC_speed",
-    "project_version":    "1286d01-dirty",
+    "project_version":    "d37e11e-dirty",
     "project_path":       "/Users/shady/Desktop/BLDC-motor/BLDC_speed",
     "idf_path":           "/Users/shady/esp/esp-idf",
     "build_dir":          "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build",
@@ -800,13 +800,13 @@
             "dir": "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main",
             "type": "LIBRARY",
             "lib": "__idf_main",
-            "reqs": [ "driver" ],
+            "reqs": [ "driver", "esp_timer" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/esp-idf/main/libmain.a",
-            "sources": [ "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/BLDC_speed.cpp", "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/BLDCPulseCalculator.cpp", "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/PwmGenerator.cpp", "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/Uart.cpp" ],
-            "include_dirs": [ "." ]
+            "sources": [ "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/GLOBALS.hpp", "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/BLDC_speed.cpp", "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/BLDCPulseCalculator/BLDCPulseCalculator.cpp", "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main/Uart/Uart.cpp" ],
+            "include_dirs": [ ".", "BLDCPulseCalculator", "Uart" ]
         },
         "mbedtls": {
             "alias": "idf::mbedtls",
@@ -2112,11 +2112,11 @@
             "prefix": "idf",
             "dir": "/Users/shady/Desktop/BLDC-motor/BLDC_speed/main",
             "lib": "__idf_main",
-            "reqs": [ "driver" ],
+            "reqs": [ "driver", "esp_timer" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
-            "include_dirs": [ "." ]
+            "include_dirs": [ ".", "BLDCPulseCalculator", "Uart" ]
         }
     },
     "debug_prefix_map_gdbinit": ""

@@ -41,12 +41,7 @@ void PwmGenerator::begin(const BaseType_t app_cpu){
 
 void PwmGenerator::front()
 {
-  for(int i=25;i< 255;i=i+25)
-  {
-    ledcWrite(this->pwmPin, i);
-    vTaskDelay(10000 / portTICK_PERIOD_MS);
-  }
-  ledcWrite(this->pwmPin, 0);
+  ledcWrite(this->pwmPin, this->dutyCycle);
 } 
 
 void PwmGenerator::frontTask(void* pvParameters){

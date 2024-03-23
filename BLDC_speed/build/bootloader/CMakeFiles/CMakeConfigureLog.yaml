@@ -80,8 +80,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-onuN2J"
-      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-onuN2J"
+      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-mlcC2i"
+      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-mlcC2i"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -91,10 +91,10 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-onuN2J'
+        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-mlcC2i'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_7b064
-        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_03805
+        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-gcc
         Target: xtensa-esp-elf
@@ -102,8 +102,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib
         gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) 
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_7b064.dir/'
-         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1 -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_7b064.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccUq40wG.s
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_03805.dir/'
+         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1 -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_03805.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//cc0fIgMv.s
         GNU C17 (crosstool-NG esp-13.2.0_20230928) version 13.2.0 (xtensa-esp-elf)
         	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3), GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -120,12 +120,12 @@ events:
          /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/include
         End of search list.
         Compiler executable checksum: ff8927379fe54e3f7314307a5d7def28
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_7b064.dir/'
-         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccUq40wG.s
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_03805.dir/'
+         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//cc0fIgMv.s
         COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/
         LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.'
-        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj -o cmTC_7b064   && :
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.'
+        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj -o cmTC_03805   && :
         Using built-in specs.
         COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-gcc
         COLLECT_LTO_WRAPPER=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper
@@ -136,9 +136,9 @@ events:
         gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) 
         COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/
         LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_7b064' '-dumpdir' 'cmTC_7b064.'
-         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccS9jSDb.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_7b064 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_7b064' '-dumpdir' 'cmTC_7b064.'
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_03805' '-dumpdir' 'cmTC_03805.'
+         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccp4cmvU.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_03805 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_03805' '-dumpdir' 'cmTC_03805.'
         
       exitCode: 0
   -
@@ -174,10 +174,10 @@ events:
     message: |
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(xtensa-esp32-elf-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-onuN2J']
+        ignore line: [Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-mlcC2i']
         ignore line: []
-        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_7b064]
-        ignore line: [[1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_03805]
+        ignore line: [[1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-gcc]
         ignore line: [Target: xtensa-esp-elf]
@@ -185,8 +185,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib]
         ignore line: [gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_7b064.dir/']
-        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1 -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_7b064.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccUq40wG.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_03805.dir/']
+        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1 -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_03805.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//cc0fIgMv.s]
         ignore line: [GNU C17 (crosstool-NG esp-13.2.0_20230928) version 13.2.0 (xtensa-esp-elf)]
         ignore line: [	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3)  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -203,12 +203,12 @@ events:
         ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: ff8927379fe54e3f7314307a5d7def28]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_7b064.dir/']
-        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccUq40wG.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_03805.dir/']
+        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//cc0fIgMv.s]
         ignore line: [COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.']
-        ignore line: [[2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj -o cmTC_7b064   && :]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.']
+        ignore line: [[2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj -o cmTC_03805   && :]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-gcc]
         ignore line: [COLLECT_LTO_WRAPPER=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper]
@@ -219,13 +219,13 @@ events:
         ignore line: [gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) ]
         ignore line: [COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_7b064' '-dumpdir' 'cmTC_7b064.']
-        link line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccS9jSDb.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_7b064 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_03805' '-dumpdir' 'cmTC_03805.']
+        link line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccp4cmvU.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_03805 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o]
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccS9jSDb.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccp4cmvU.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
           arg [-plugin-opt=-pass-through=-lnosys] ==> ignore
@@ -233,7 +233,7 @@ events:
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [--dynconfig=xtensa_esp32.so] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_7b064] ==> ignore
+          arg [cmTC_03805] ==> ignore
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o] ==> obj [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o]
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o] ==> obj [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o]
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o] ==> obj [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o]
@@ -242,7 +242,7 @@ events:
           arg [-L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0] ==> dir [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0]
           arg [-L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc] ==> dir [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc]
           arg [-L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib] ==> dir [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib]
-          arg [CMakeFiles/cmTC_7b064.dir/CMakeCCompilerABI.c.obj] ==> ignore
+          arg [CMakeFiles/cmTC_03805.dir/CMakeCCompilerABI.c.obj] ==> ignore
           arg [-lgcc] ==> lib [gcc]
           arg [-lc] ==> lib [c]
           arg [-lnosys] ==> lib [nosys]
@@ -276,8 +276,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ywpRJH"
-      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ywpRJH"
+      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-N5hRSN"
+      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-N5hRSN"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -287,10 +287,10 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ywpRJH'
+        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-N5hRSN'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_2b946
-        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_5c178
+        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         Using built-in specs.
         COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-g++
         Target: xtensa-esp-elf
@@ -298,8 +298,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib
         gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) 
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_2b946.dir/'
-         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1plus -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_2b946.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccKIhRUm.s
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_5c178.dir/'
+         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1plus -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_5c178.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccy7ZFF4.s
         GNU C++17 (crosstool-NG esp-13.2.0_20230928) version 13.2.0 (xtensa-esp-elf)
         	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3), GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -322,12 +322,12 @@ events:
          /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/include
         End of search list.
         Compiler executable checksum: dc5dc66c029d2234e760269b6d3b7689
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_2b946.dir/'
-         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccKIhRUm.s
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_5c178.dir/'
+         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccy7ZFF4.s
         COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/
         LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.'
-        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_2b946   && :
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.'
+        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_5c178   && :
         Using built-in specs.
         COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-g++
         COLLECT_LTO_WRAPPER=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper
@@ -338,9 +338,9 @@ events:
         gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) 
         COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/
         LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_2b946' '-dumpdir' 'cmTC_2b946.'
-         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccl06IXj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_2b946 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o
-        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_2b946' '-dumpdir' 'cmTC_2b946.'
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_5c178' '-dumpdir' 'cmTC_5c178.'
+         /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccm5sxxo.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_5c178 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o
+        COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_5c178' '-dumpdir' 'cmTC_5c178.'
         
       exitCode: 0
   -
@@ -382,10 +382,10 @@ events:
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(xtensa-esp32-elf-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ywpRJH']
+        ignore line: [Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-N5hRSN']
         ignore line: []
-        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_2b946]
-        ignore line: [[1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_5c178]
+        ignore line: [[1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-g++]
         ignore line: [Target: xtensa-esp-elf]
@@ -393,8 +393,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib]
         ignore line: [gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_2b946.dir/']
-        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1plus -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_2b946.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccKIhRUm.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_5c178.dir/']
+        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/cc1plus -quiet -v -imultilib esp32 -iprefix /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/ /opt/homebrew/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_5c178.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mdynconfig=xtensa_esp32.so -mlongcalls -Wno-frame-address -version -o /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccy7ZFF4.s]
         ignore line: [GNU C++17 (crosstool-NG esp-13.2.0_20230928) version 13.2.0 (xtensa-esp-elf)]
         ignore line: [	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3)  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -417,12 +417,12 @@ events:
         ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: dc5dc66c029d2234e760269b6d3b7689]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_2b946.dir/']
-        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccKIhRUm.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_5c178.dir/']
+        ignore line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/as --traditional-format --longcalls --dynconfig=xtensa_esp32.so -o CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccy7ZFF4.s]
         ignore line: [COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.']
-        ignore line: [[2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_2b946   && :]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [[2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_5c178   && :]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp-elf-g++]
         ignore line: [COLLECT_LTO_WRAPPER=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper]
@@ -433,13 +433,13 @@ events:
         ignore line: [gcc version 13.2.0 (crosstool-NG esp-13.2.0_20230928) ]
         ignore line: [COMPILER_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/:/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_2b946' '-dumpdir' 'cmTC_2b946.']
-        link line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccl06IXj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_2b946 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-mdynconfig=xtensa_esp32.so' '-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_5c178' '-dumpdir' 'cmTC_5c178.']
+        link line: [ /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2 -plugin /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so -plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccm5sxxo.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc --dynconfig=xtensa_esp32.so -o cmTC_5c178 /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0 -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc -L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtend.o /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtn.o]
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../libexec/gcc/xtensa-esp-elf/13.2.0/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccl06IXj.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/var/folders/lt/4vfdvhb512gfw79sbj_jh45c0000gn/T//ccm5sxxo.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
           arg [-plugin-opt=-pass-through=-lnosys] ==> ignore
@@ -447,7 +447,7 @@ events:
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [--dynconfig=xtensa_esp32.so] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_2b946] ==> ignore
+          arg [cmTC_5c178] ==> ignore
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o] ==> obj [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib/esp32/crt0.o]
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o] ==> obj [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crti.o]
           arg [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o] ==> obj [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/esp32/crtbegin.o]
@@ -456,7 +456,7 @@ events:
           arg [-L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0] ==> dir [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0]
           arg [-L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc] ==> dir [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc]
           arg [-L/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib] ==> dir [/Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/../lib/gcc/xtensa-esp-elf/13.2.0/../../../../xtensa-esp-elf/lib]
-          arg [CMakeFiles/cmTC_2b946.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
+          arg [CMakeFiles/cmTC_5c178.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc] ==> lib [gcc]
@@ -491,8 +491,8 @@ events:
     checks:
       - "Looking for sys/types.h"
     directories:
-      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-L53nDJ"
-      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-L53nDJ"
+      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-NEoCAl"
+      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-NEoCAl"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -502,11 +502,11 @@ events:
       variable: "HAVE_SYS_TYPES_H"
       cached: true
       stdout: |
-        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-L53nDJ'
+        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-NEoCAl'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_aa8dd
-        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_aa8dd.dir/CheckIncludeFile.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-L53nDJ/CheckIncludeFile.c
-        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_aa8dd.dir/CheckIncludeFile.c.obj -o cmTC_aa8dd   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_e72e6
+        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_e72e6.dir/CheckIncludeFile.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-NEoCAl/CheckIncludeFile.c
+        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_e72e6.dir/CheckIncludeFile.c.obj -o cmTC_e72e6   && :
         
       exitCode: 0
   -
@@ -518,8 +518,8 @@ events:
     checks:
       - "Looking for stdint.h"
     directories:
-      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-EdI9iH"
-      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-EdI9iH"
+      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-kfA0PK"
+      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-kfA0PK"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -529,11 +529,11 @@ events:
       variable: "HAVE_STDINT_H"
       cached: true
       stdout: |
-        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-EdI9iH'
+        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-kfA0PK'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_5abc4
-        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_5abc4.dir/CheckIncludeFile.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-EdI9iH/CheckIncludeFile.c
-        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_5abc4.dir/CheckIncludeFile.c.obj -o cmTC_5abc4   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_beb33
+        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_beb33.dir/CheckIncludeFile.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-kfA0PK/CheckIncludeFile.c
+        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_beb33.dir/CheckIncludeFile.c.obj -o cmTC_beb33   && :
         
       exitCode: 0
   -
@@ -545,8 +545,8 @@ events:
     checks:
       - "Looking for stddef.h"
     directories:
-      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-qQnXhS"
-      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-qQnXhS"
+      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-OB1GL2"
+      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-OB1GL2"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -556,11 +556,11 @@ events:
       variable: "HAVE_STDDEF_H"
       cached: true
       stdout: |
-        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-qQnXhS'
+        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-OB1GL2'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_6827d
-        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_6827d.dir/CheckIncludeFile.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-qQnXhS/CheckIncludeFile.c
-        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_6827d.dir/CheckIncludeFile.c.obj -o cmTC_6827d   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_6e421
+        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_6e421.dir/CheckIncludeFile.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-OB1GL2/CheckIncludeFile.c
+        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_6e421.dir/CheckIncludeFile.c.obj -o cmTC_6e421   && :
         
       exitCode: 0
   -
@@ -572,8 +572,8 @@ events:
     checks:
       - "Check size of time_t"
     directories:
-      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-VayshF"
-      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-VayshF"
+      source: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Sn72zK"
+      binary: "/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Sn72zK"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -583,11 +583,11 @@ events:
       variable: "HAVE_TIME_T_SIZE"
       cached: true
       stdout: |
-        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-VayshF'
+        Change Dir: '/Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Sn72zK'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_b2079
-        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_b2079.dir/TIME_T_SIZE.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-VayshF/TIME_T_SIZE.c
-        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_b2079.dir/TIME_T_SIZE.c.obj -o cmTC_b2079   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_de886
+        [1/2] /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_de886.dir/TIME_T_SIZE.c.obj -c /Users/shady/Desktop/BLDC-motor/BLDC_speed/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Sn72zK/TIME_T_SIZE.c
+        [2/2] : && /Users/shady/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20230928/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_de886.dir/TIME_T_SIZE.c.obj -o cmTC_de886   && :
         
       exitCode: 0
 ...
