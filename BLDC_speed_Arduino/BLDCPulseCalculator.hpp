@@ -11,7 +11,6 @@
 
 class BLDCPulseCalculator {
 private:
-  portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 
   gpio_num_t wavePin;
   uint8_t motorId;
@@ -54,15 +53,30 @@ public:
 BLDCPulseCalculator::BLDCPulseCalculator(gpio_num_t wavePin, uint8_t motorId) :
 wavePin(wavePin), 
 motorId(motorId),
-speed(0)
+speed(0),
+counter(0),
+nextTimeStamp(0),
+timeStamp(0)
 {
   memset((void *)(timePeriodValues), 0, sizeof(timePeriodValues));
   memset((void *)(newTimePeriodValues), 0, sizeof(newTimePeriodValues));
-
-  this->counter=0;
-  this->nextTimeStamp=0;
-  this->timeStamp=0;
   // instance = this;
+
+    if(this->wavePin != GPIO_NUM_NC) {
+      gpio_config_t gpioOutputConfigure = {
+        .pin_bit_mask = (1ULL << this->wavePin),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_ENABLE,
+        .intr_type = GPIO_INTR_ANYEDGE
+      };
+      ESP_ERROR_CHECK(gpio_config(&gpioOutputConfigure));
+    } else {
+      ESP_LOGI(TAG, "wavePin%d set to GPIO_NUM_NC", motorId);
+    }
+
+  ESP_ERROR_CHECK(gpio_install_isr_service(0));
+  ESP_ERROR_CHECK(gpio_isr_handler_add(this->wavePin, staticCalculateValuesWrapper, (void*)(this)));
 }
 
 /* 
@@ -119,36 +133,34 @@ speed(0)
 
 void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
 
-  gpio_config_t gpioOutputConfigure = {
-    .pin_bit_mask = (1ULL << this->wavePin),
-    .mode = GPIO_MODE_INPUT,
-    .pull_up_en = GPIO_PULLUP_DISABLE,
-    .pull_down_en = GPIO_PULLDOWN_ENABLE,
-    .intr_type = GPIO_INTR_ANYEDGE
-  };
-  ESP_ERROR_CHECK(gpio_config(&gpioOutputConfigure));
+  // Task handles
+  static TaskHandle_t motorSpeedTaskHandle = nullptr;
 
-  // gpio_set_direction(wavePin, GPIO_MODE_INPUT);
-  // gpio_pulldown_en(wavePin);
-  // gpio_pullup_dis(wavePin);
-  // gpio_set_intr_type(wavePin, GPIO_INTR_ANYEDGE);
-
-  gpio_install_isr_service(0);
-  gpio_isr_handler_add(this->wavePin, staticCalculateValuesWrapper, (void*)(this));
-
-  xTaskCreatePinnedToCore(
-    motorSpeedTask,
-    "motorSpeedTask",
-    2048,
-    this,
-    1,
-    NULL,
-    app_cpu
-  );
+  char *TAG = "BLDCPulseCalculator::begin";
+  
+  if(!motorSpeedTaskHandle) {
+    BaseType_t result = xTaskCreatePinnedToCore(
+      &motorSpeedTask,
+      "motorSpeedTask",
+      2048,
+      this,
+      1,
+      &motorSpeedTaskHandle,
+      app_cpu
+    );
+    
+    if (result == pdPASS) {
+      ESP_LOGI("TAG", "Created the motorSpeedTask successfully");
+    } else {
+      ESP_LOGI("TAG", "Failed to create motorSpeedTask");
+    }
+  } else {
+    ESP_LOGI("TAG", "motorSpeedTask already exists");
+  }
 }
 
 void BLDCPulseCalculator::calculateValuesInternal() {
-  // static portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+  static portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
   portENTER_CRITICAL_ISR(&mux);
 
   timeStamp = esp_timer_get_time() / 1000;  // Convert to milliseconds

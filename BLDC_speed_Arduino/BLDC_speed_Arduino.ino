@@ -79,11 +79,11 @@ void loop() {
   switch (status) 
   {
     case States::FRONT:
-      front();
+      direction.front();
     break;
 
     case States::BACK:
-      back();
+      direction.back();
     break;
     
     case States::STOP:
