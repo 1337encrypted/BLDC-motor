@@ -35,7 +35,7 @@ void PwmGenerator::begin(const BaseType_t app_cpu) {
   
   ledcAttach(this->pwmPin, frequency, resolution);
 
-  if(!frontHandle) {
+  if(frontHandle == nullptr) {
     BaseType_t result = xTaskCreatePinnedToCore(
       &frontTask,
       "frontTask",
@@ -65,7 +65,7 @@ void PwmGenerator::frontTask(void* pvParameters){
   PwmGenerator* instance = static_cast<PwmGenerator*>(pvParameters);
   while (1) {
     instance->front();
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
 

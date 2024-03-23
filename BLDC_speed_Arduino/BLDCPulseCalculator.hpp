@@ -35,9 +35,6 @@ private:
   
 
 public:
-
-
-
   inline BLDCPulseCalculator(gpio_num_t wavePin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
   inline void calculateValuesInternal(void) __attribute__((always_inline));
   inline void motorSpeed() __attribute__((always_inline));
@@ -138,7 +135,7 @@ void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
 
   char *TAG = "BLDCPulseCalculator::begin";
   
-  if(!motorSpeedTaskHandle) {
+  if(motorSpeedTaskHandle == nullptr) {
     BaseType_t result = xTaskCreatePinnedToCore(
       &motorSpeedTask,
       "motorSpeedTask",

@@ -53,11 +53,9 @@ void setup() {
   PMSMMotor2.begin(app_cpu1);
   motor2.begin(app_cpu1); 
 
+  direction.begin();
 
   OLEDFunctions::begin(app_cpu1);
-
-  pinMode(relayPin1, OUTPUT);
-  pinMode(relayPin2, OUTPUT);
 
   vTaskDelay(100 / portTICK_PERIOD_MS);
 

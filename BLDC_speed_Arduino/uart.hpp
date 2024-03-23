@@ -79,7 +79,7 @@ void HardwareUart::begin(const BaseType_t app_cpu) {
   const char *TAG = "HardwareUart::begin";
     TaskHandle_t xUartHandle = nullptr;
     
-  if(!xUartHandle) {
+  if(xUartHandle == nullptr) {
       BaseType_t result = xTaskCreatePinnedToCore(
           uartTask,
           "uart_task",
