@@ -1,3 +1,6 @@
 [submodule "BLDC_speed/main/components/u8g2-hal-esp-idf"]
 	path = BLDC_speed/main/components/u8g2-hal-esp-idf
 	url = https://github.com/mkfrey/u8g2-hal-esp-idf.git
+[submodule "KLEIT_students_project"]
+	path = KLEIT_students_project
+	url = git@github.com:1337encrypted/KLEIT_students_project.git
