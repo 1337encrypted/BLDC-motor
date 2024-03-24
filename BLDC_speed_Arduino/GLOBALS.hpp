@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <BluetoothSerial.h>
 #include "uart.hpp"
 #include "BLDCPulseCalculator.hpp"
 #include "oledFunctions.hpp"
 #include "pwmGenerator.hpp"
-#include <U8g2lib.h>
-
+#include "MotorDirection.hpp"
+#include "dataLogger.hpp"
 
 
 // Use only core 1 for demo purposes
@@ -22,24 +23,31 @@ constexpr gpio_num_t wavePin2 = GPIO_NUM_15;
 constexpr gpio_num_t motorPwm1 = GPIO_NUM_12;
 constexpr gpio_num_t motorPwm2 = GPIO_NUM_14; 
 
-const uint32_t frequency = 100000;           // PWM frequency in Hz
-const uint8_t resolution = 8;        // PWM resolution (8-bit)
+const uint32_t frequency = 100000;            // PWM frequency in Hz
+const uint8_t resolution = 8;                 // PWM resolution (8-bit)
 
 constexpr uint8_t motorId1 = 1;
 constexpr uint8_t motorId2 = 2;
 
-constexpr uint8_t relayPin1 = 18;
-constexpr uint8_t relayPin2 = 17;
+constexpr gpio_num_t relayPin1 = GPIO_NUM_19;
+constexpr gpio_num_t relayPin2 = GPIO_NUM_20;
 
 /* Object creation */
-BLDCPulseCalculator PMSMMotor1(wavePin1, motorId1);
-BLDCPulseCalculator PMSMMotor2(wavePin2, motorId2);
+BLDCPulseCalculator motorPulse1(wavePin1, motorId1);
+BLDCPulseCalculator motorPulse2(wavePin2, motorId2);
 
-// motorSynchronization motor1(motorPwm1);
-PwmGenerator motor1(motorPwm1, frequency, resolution);
-PwmGenerator motor2(motorPwm2, frequency, resolution);
+// PWMgenerator motor1(motorPwm1);
+PwmGenerator motorPWM1(motorPwm1, frequency, resolution);
+PwmGenerator motorPWM2(motorPwm2, frequency, resolution);
+
+// Motor direction
+MotorDirection direction(relayPin1,relayPin2);
 
 // Uart object
 HardwareUart serial;
 
-char data[40];
+// Bluetooth object
+BluetoothSerial SerialBT;
+
+// Data logger
+dataLogger sendDataToPhone(SerialBT);

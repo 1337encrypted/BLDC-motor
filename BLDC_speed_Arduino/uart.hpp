@@ -22,77 +22,80 @@ constexpr int STACK_SIZE = 2048;
 
 
 class HardwareUart {
-private:
-    const int uart_buffer_size;
-    QueueHandle_t uart_queue;
-    int length;
-    const char* test_str;
+  private:
+  const int uart_buffer_size;
+  QueueHandle_t uart_queue;
+  int length;
+  const char* test_str;
 
-    // Define the structure for the motor characteristics data
-    typedef struct MotorCharacteristicsData{
-        float current1;
-        float current2;
-        float voltage1;
-    }MotorCharacteristicsData;
+  // Define the structure for the motor characteristics data
+  typedef struct MotorCharacteristicsData{
+      float current1;
+      float current2;
+      float voltage1;
+  }MotorCharacteristicsData;
 
-    MotorCharacteristicsData received_data;
+  MotorCharacteristicsData received_data;
+  
+  TaskHandle_t uartHandle;
     
-public:
-    HardwareUart(int = 1024, const char* = "S\n");
-    void begin(const BaseType_t = 1);
-    void sendData();
-    void receiveData();
-    void printIncomingData(size_t);
+  public:
+  HardwareUart(int = 1024, const char* = "S\n");
+  void begin(const BaseType_t = 1);
+  void sendData();
+  void receiveData();
+  void printIncomingData(size_t);
 
-    //FreeRTOS task
-    static void uartTask(void *);
+  //FreeRTOS task
+  static void uartTask(void *);
 
-    TaskHandle_t xUartHandle;
 };
 
 HardwareUart::HardwareUart(int buffer_size, const char* str) : 
 uart_buffer_size(buffer_size), 
 length(0), 
 test_str(str),
-received_data{0.00, 0.00, 0.00} {
+received_data{0.00, 0.00, 0.00},
+uartHandle(nullptr) {
 
-    uart_config_t uart_config = {
-        .baud_rate = UART_BAUD_RATE,
-        .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .rx_flow_ctrl_thresh = UART_SCLK_APB,
-        .source_clk = UART_SCLK_DEFAULT
-    };
+  uart_config_t uart_config = {
+      .baud_rate = UART_BAUD_RATE,
+      .data_bits = UART_DATA_8_BITS,
+      .parity    = UART_PARITY_DISABLE,
+      .stop_bits = UART_STOP_BITS_1,
+      .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+      .rx_flow_ctrl_thresh = UART_SCLK_APB,
+      .source_clk = UART_SCLK_DEFAULT
+  };
 
-    ESP_ERROR_CHECK(uart_param_config(PORT_NUM, &uart_config));
-    ESP_ERROR_CHECK(uart_set_pin(PORT_NUM, TXD, RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
-    ESP_ERROR_CHECK(uart_driver_install(PORT_NUM, uart_buffer_size, uart_buffer_size, 10, &uart_queue, 0));
-
-    xUartHandle = nullptr;
+  ESP_ERROR_CHECK(uart_param_config(PORT_NUM, &uart_config));
+  ESP_ERROR_CHECK(uart_set_pin(PORT_NUM, TXD, RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+  ESP_ERROR_CHECK(uart_driver_install(PORT_NUM, uart_buffer_size, uart_buffer_size, 10, &uart_queue, 0));
 }
 
 void HardwareUart::begin(const BaseType_t app_cpu) {
-    if(!xUartHandle) {
-        BaseType_t result = xTaskCreatePinnedToCore(
-            uartTask,
-            "uart_task",
-            STACK_SIZE,
-            this,
-            2,
-            &xUartHandle,
-            app_cpu
-        );
 
-        if (result == pdPASS){
-            ESP_LOGI("UARTBEGIN", "Created the UartTask successfully");
-        } else {
-            ESP_LOGI("UARTBEGIN", "Failed to create the UartTask task");
-        }
-    } else {
-        ESP_LOGI("UARTBEGIN", "UartTask already created");
-    }
+  const char* TAG = "HardwareUart::begin";
+
+  if(uartHandle == nullptr) {
+      BaseType_t result = xTaskCreatePinnedToCore(
+          &uartTask,
+          "uart_task",
+          STACK_SIZE,
+          this,
+          2,
+          &uartHandle,
+          app_cpu
+      );
+
+      if (result == pdPASS){
+          ESP_LOGI(TAG, "Created the UartTask successfully");
+      } else {
+          ESP_LOGI(TAG, "Failed to create the UartTask task");
+      }
+  } else {
+      ESP_LOGI(TAG, "UartTask already created");
+  }
 }
 
 void HardwareUart::sendData() {
@@ -146,7 +149,7 @@ void HardwareUart::printIncomingData(size_t data_length) {
 
 
 void HardwareUart::uartTask(void *arg) {
-  HardwareUart *serial = static_cast<HardwareUart*>(arg);
+  static HardwareUart *serial = static_cast<HardwareUart*>(arg);
 
   while (1) {
     serial->sendData();
