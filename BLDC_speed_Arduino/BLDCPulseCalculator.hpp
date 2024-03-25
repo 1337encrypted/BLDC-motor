@@ -171,7 +171,7 @@ void BLDCPulseCalculator::motorSpeedTask(void* pvParameters) {
   BLDCPulseCalculator* instance = static_cast<BLDCPulseCalculator*>(pvParameters);
   while (1) {
     instance->motorSpeed();
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
 

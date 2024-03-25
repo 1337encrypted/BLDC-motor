@@ -1,3 +1,4 @@
+#pragma once
 #include <BluetoothSerial.h>
 
 class dataLogger {
@@ -60,6 +61,6 @@ class dataLogger {
     static dataLogger *instance = static_cast<dataLogger*>(pvParameters);
     while(true) {
       instance->sendMotorData();
-      vTaskDelay(1 / portTICK_PERIOD_MS);
+      vTaskDelay(10 / portTICK_PERIOD_MS);
     }
   }

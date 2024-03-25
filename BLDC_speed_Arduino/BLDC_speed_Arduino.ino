@@ -1,4 +1,3 @@
-#include "BluetoothSerial.h"
 #include "GLOBALS.hpp"
 
 void setup() {
@@ -8,126 +7,20 @@ void setup() {
 
   motorPulse1.begin(app_cpu0);
   motorPulse2.begin(app_cpu1);
-  motorPWM1.begin(app_cpu0);
+  motorPWM1.begin(app_cpu1);
   motorPWM2.begin(app_cpu1); 
   direction.begin();
-
+  
   serial.begin(app_cpu1);
   SerialBT.begin("Pod1_Bluetooth");
   sendDataToPhone.begin(app_cpu0);
   
+  controlMotor.begin(app_cpu1);
 
 
   // vTaskDelay(100 / portTICK_PERIOD_MS);
-  // vTaskDelete(NULL);
+  vTaskDelete(NULL);
 }
 
 void loop() {
-//  if (SerialBT.available()) 
-
-
-//   enum class States : uint8_t 
-//     {
-//       FRONT,
-//       BACK,
-//       STOP,
-//       SPEED1,
-//       SPEED2,
-//       SPEED3,
-//       SPEED4,
-//       SPEED5,
-//       SPEED6,
-//       SPEED7,
-//       SPEED8,
-//       SPEED9,
-//       SPEED10,
-//     };
-//     States status;
-
-//         status = charToStates(SerialBT.read());
-//   } else {
-//       status = States::STOP;
-//     }
-
-//     switch (status) {
-//       case States::FRONT:
-//         direction.front();
-//       break;
-
-//       case States::BACK:
-//         direction.back();
-//       break;
-      
-//       case States::STOP:
-//         motorPWM1.setPwm(0);
-//         motorPWM2.setPwm(0);
-//       break;
-
-//       case States::SPEED1:
-//         motorPWM1.setPwm(112);
-//         motorPWM2.setPwm(112);
-//         break;
-        
-//       case States::SPEED2:
-//         motorPWM1.setPwm(126);
-//         motorPWM2.setPwm(126);
-//         break;
-        
-//       case States::SPEED3:
-//         motorPWM1.setPwm(140);
-//         motorPWM2.setPwm(140);
-//         break;
-
-//       case States::SPEED4:
-//         motorPWM1.setPwm(154);
-//         motorPWM2.setPwm(154);
-//         break;
-//       case States::SPEED5:
-//         motorPWM1.setPwm(168);
-//         motorPWM2.setPwm(168);
-//         break;
-
-//       case States::SPEED6:
-//         motorPWM1.setPwm(182);
-//         motorPWM2.setPwm(182);
-//         break;
-
-//       case States::SPEED7:
-//         motorPWM1.setPwm(196);
-//         motorPWM2.setPwm(196);
-//         break;
-
-//       case States::SPEED8:
-//         motorPWM1.setPwm(210);
-//         motorPWM2.setPwm(210);
-//         break;
-
-//       case States::SPEED9:
-//         motorPWM1.setPwm(224);
-//         motorPWM2.setPwm(224);
-//         break;
-
-//       case States::SPEED10:
-//         motorPWM1.setPwm(255);
-//         motorPWM2.setPwm(255);
-//         break;
-//     }
-// }
-
-// States charToStates(char state) {
-//       switch (state) {
-//         case 'F': return States::FRONT;
-//         case 'B': return States::BACK;
-//         case 'S': return States::STOP;
-//         case '0': return States::SPEED1;
-//         case '1': return States::SPEED2;
-//         case '2': return States::SPEED3;
-//         case '3': return States::SPEED4;
-//         case '4': return States::SPEED5;
-//         case '5': return States::SPEED6;
-//         case '6': return States::SPEED7;
-//         case '7': return States::SPEED8;
-//         case '8': return States::SPEED9;
-//         case '9': return States::SPEED10;
-//       }
 }

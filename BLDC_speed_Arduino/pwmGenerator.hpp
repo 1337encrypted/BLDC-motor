@@ -70,7 +70,7 @@ void PwmGenerator::frontTask(void* pvParameters){
   PwmGenerator* instance = static_cast<PwmGenerator*>(pvParameters);
   while (1) {
     instance->front();
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
 

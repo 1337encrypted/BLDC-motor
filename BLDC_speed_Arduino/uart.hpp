@@ -149,7 +149,7 @@ void HardwareUart::printIncomingData(size_t data_length) {
 
 
 void HardwareUart::uartTask(void *arg) {
-  static HardwareUart *serial = static_cast<HardwareUart*>(arg);
+  static HardwareUart* serial = static_cast<HardwareUart*>(arg);
 
   while (1) {
     serial->sendData();

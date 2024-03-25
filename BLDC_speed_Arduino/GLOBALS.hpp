@@ -1,11 +1,14 @@
+#pragma once
+
 #include <stdio.h>
-#include <BluetoothSerial.h>
+// #include <BluetoothSerial.h>
 #include "uart.hpp"
 #include "BLDCPulseCalculator.hpp"
 #include "oledFunctions.hpp"
 #include "pwmGenerator.hpp"
 #include "MotorDirection.hpp"
 #include "dataLogger.hpp"
+#include "handleMotorInput.hpp"
 
 
 // Use only core 1 for demo purposes
@@ -29,8 +32,8 @@ const uint8_t resolution = 8;                 // PWM resolution (8-bit)
 constexpr uint8_t motorId1 = 1;
 constexpr uint8_t motorId2 = 2;
 
-constexpr gpio_num_t relayPin1 = GPIO_NUM_19;
-constexpr gpio_num_t relayPin2 = GPIO_NUM_20;
+constexpr gpio_num_t triggerPin1 = GPIO_NUM_19;
+constexpr gpio_num_t triggerPin2 = GPIO_NUM_20;
 
 /* Object creation */
 BLDCPulseCalculator motorPulse1(wavePin1, motorId1);
@@ -41,7 +44,7 @@ PwmGenerator motorPWM1(motorPwm1, frequency, resolution);
 PwmGenerator motorPWM2(motorPwm2, frequency, resolution);
 
 // Motor direction
-MotorDirection direction(relayPin1,relayPin2);
+MotorDirection direction(triggerPin1,triggerPin2);
 
 // Uart object
 HardwareUart serial;
@@ -51,3 +54,7 @@ BluetoothSerial SerialBT;
 
 // Data logger
 dataLogger sendDataToPhone(SerialBT);
+
+// MotorSynchrnization object
+// handleMotorInput controlMotor(motorPulse1,motorPulse2,motorPWM1,motorPWM2,direction,SerialBT);
+handleMotorInput controlMotor(motorPWM1,motorPWM2,direction,SerialBT);
