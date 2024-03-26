@@ -3,8 +3,9 @@
 #include "BLDCPulseCalculator.hpp"
 #include "oledFunctions.hpp"
 #include "pwmGenerator.hpp"
-#include <U8g2lib.h>
-
+#include "MotorDirection.hpp"
+#include "dataLogger.hpp"
+#include "handleMotorInput.hpp"
 
 
 // Use only core 1 for demo purposes
@@ -28,8 +29,8 @@ const uint8_t resolution = 8;        // PWM resolution (8-bit)
 constexpr uint8_t motorId1 = 1;
 constexpr uint8_t motorId2 = 2;
 
-constexpr uint8_t relayPin1 = 18;
-constexpr uint8_t relayPin2 = 17;
+constexpr gpio_num_t triggerPin1 = GPIO_NUM_19;
+constexpr gpio_num_t triggerPin2 = GPIO_NUM_23;
 
 /* Object creation */
 BLDCPulseCalculator PMSMMotor1(wavePin1, motorId1);
@@ -42,4 +43,17 @@ PwmGenerator motor2(motorPwm2, frequency, resolution);
 // Uart object
 HardwareUart serial;
 
-char data[40];
+// Motor direction
+MotorDirection direction(triggerPin1,triggerPin2);
+
+// char data[40];
+
+// Bluetooth object
+BluetoothSerial SerialBT;
+
+// Data logger
+dataLogger sendDataToPhone(SerialBT);
+
+// MotorSynchrnization object
+// handleMotorInput controlMotor(motorPulse1,motorPulse2,motorPWM1,motorPWM2,direction,SerialBT);
+handleMotorInput controlMotor(motor1,motor2,direction,SerialBT);
