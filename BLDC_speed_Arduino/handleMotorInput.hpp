@@ -100,10 +100,10 @@ public:
   }
 
   void modifyMotorState() {
-    if(! SerialBT.isClosed() && SerialBT.connected()) {
-      if (SerialBT.available()) {
-        status = charToStates(SerialBT.read());
-      } 
+    if(SerialBT.connected()) {
+        if (SerialBT.available()) {
+          status = charToStates(SerialBT.read());
+        } 
     } else {
       status = States::STOP;
     }
