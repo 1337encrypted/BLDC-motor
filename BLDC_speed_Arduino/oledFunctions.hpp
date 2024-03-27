@@ -14,7 +14,7 @@ namespace OLEDFunctions {
   char voltageArr1[6];
   
   // Declare functions
-  void begin(const BaseType_t);
+  void begin(TaskHandle_t &, const BaseType_t);
   void displayRPM();
   void printUartData();
   void renderScreen();
@@ -29,7 +29,7 @@ namespace OLEDFunctions {
 U8G2_SH1106_128X64_NONAME_F_HW_I2C OLEDFunctions::oled(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 
 // Define the functions within the namespace
-void OLEDFunctions::begin(const BaseType_t app_cpu) {
+void OLEDFunctions::begin(TaskHandle_t &taskHandle, const BaseType_t app_cpu) {
   oled.setColorIndex(1);
   oled.begin();
   oled.setBitmapMode(1);
@@ -43,9 +43,19 @@ void OLEDFunctions::begin(const BaseType_t app_cpu) {
   memset(currentArr2, 0, sizeof(currentArr2));
   memset(voltageArr1, 0, sizeof(voltageArr1));
 
-  // Create renderScreenTask
-  xTaskCreatePinnedToCore(&renderScreenTask, "renderScreenTask", 2048, NULL, 1, NULL, app_cpu);
-}
+  char *TAG = "OLEDFunctions::begin";
+
+  if(taskHandle == nullptr) {
+  BaseType_t result = xTaskCreatePinnedToCore(&renderScreenTask, "renderScreenTask", 2048, NULL, 1, &taskHandle, app_cpu);
+  if (result == pdPASS){
+          ESP_LOGI(TAG, "Created the renderScreenTask successfully");
+      } else {
+          ESP_LOGI(TAG, "Failed to create the renderScreenTask task");
+      }
+    } else {
+      ESP_LOGI(TAG, "renderScreenTask already created");
+    }
+  }
 
 // Define utility functions 
 void OLEDFunctions::clearBuffer() {

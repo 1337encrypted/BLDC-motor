@@ -12,7 +12,7 @@
 class BLDCPulseCalculator {
 private:
   
-  gpio_num_t wavePin;
+  gpio_num_t feedBackPin;
   uint8_t motorId;
 
   volatile uint8_t counter;
@@ -34,20 +34,20 @@ private:
   
 
 public:
-  inline BLDCPulseCalculator(gpio_num_t wavePin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
+  inline BLDCPulseCalculator(gpio_num_t feedBackPin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
   inline void calculateValuesInternal(void) __attribute__((always_inline));
   inline void motorSpeed() __attribute__((always_inline));
   inline uint16_t getSpeed() __attribute__((always_inline));
   
-  inline void begin(const BaseType_t = 1) __attribute__((always_inline));
+  inline void begin(TaskHandle_t &, const BaseType_t = 1) __attribute__((always_inline));
   static inline void motorSpeedTask(void*) __attribute__((always_inline));
   static void staticCalculateValuesWrapper(void *);
 };
 
 // BLDCPulseCalculator* BLDCPulseCalculator::instance = nullptr;
 
-BLDCPulseCalculator::BLDCPulseCalculator(gpio_num_t wavePin, uint8_t motorId) :
-wavePin(wavePin), 
+BLDCPulseCalculator::BLDCPulseCalculator(gpio_num_t feedBackPin, uint8_t motorId) :
+feedBackPin(feedBackPin), 
 motorId(motorId),
 speed(0),
 counter(0),
@@ -93,7 +93,7 @@ timeStamp(0)
 
   void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
     gpio_install_isr_service(0);
-    gpio_isr_handler_add(this->wavePin, staticCalculateValuesWrapper, (void*)(this));
+    gpio_isr_handler_add(this->feedBackPin, staticCalculateValuesWrapper, (void*)(this));
 
     xTaskCreatePinnedToCore(
       motorSpeedTask,
@@ -110,15 +110,12 @@ timeStamp(0)
 
 */
 
-void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
-
-  // Task handles
-  static TaskHandle_t motorSpeedTaskHandle = nullptr;
+void BLDCPulseCalculator::begin(TaskHandle_t &taskHandle, const BaseType_t app_cpu) {
 
   char *TAG = "BLDCPulseCalculator::begin";
 
   gpio_config_t gpioOutputConfigure = {
-    .pin_bit_mask = (1ULL << this->wavePin),
+    .pin_bit_mask = (1ULL << this->feedBackPin),
     .mode = GPIO_MODE_INPUT,
     .pull_up_en = GPIO_PULLUP_DISABLE,
     .pull_down_en = GPIO_PULLDOWN_ENABLE,
@@ -126,23 +123,28 @@ void BLDCPulseCalculator::begin(const BaseType_t app_cpu) {
   };
   ESP_ERROR_CHECK(gpio_config(&gpioOutputConfigure));
 
-  // gpio_set_direction(wavePin, GPIO_MODE_INPUT);
-  // gpio_pulldown_en(wavePin);
-  // gpio_pullup_dis(wavePin);
-  // gpio_set_intr_type(wavePin, GPIO_INTR_ANYEDGE);
-
   gpio_install_isr_service(0);
-  gpio_isr_handler_add(this->wavePin, staticCalculateValuesWrapper, (void*)(this));
+  gpio_isr_handler_add(this->feedBackPin, staticCalculateValuesWrapper, (void*)(this));
 
-  xTaskCreatePinnedToCore(
-    &motorSpeedTask,
-    "motorSpeedTask",
-    2048,
-    this,
-    1,
-    &motorSpeedTaskHandle,
-    app_cpu
-  );
+  if(taskHandle == nullptr) {
+    BaseType_t result = xTaskCreatePinnedToCore(
+      &motorSpeedTask,
+      "motorSpeedTask",
+      2048,
+      this,
+      1,
+      &taskHandle,
+      app_cpu
+    );
+
+    if (result == pdPASS){
+        ESP_LOGI(TAG, "Created the motorSpeedTask successfully");
+    } else {
+        ESP_LOGI(TAG, "Failed to create the motorSpeedTask task");
+    }
+  } else {
+    ESP_LOGI(TAG, "motorSpeedTask already created");
+  }
 }
 
 void BLDCPulseCalculator::calculateValuesInternal() {

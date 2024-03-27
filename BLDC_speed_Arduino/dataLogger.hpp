@@ -4,13 +4,12 @@
 class dataLogger {
 
     private:
-    TaskHandle_t dataLoggerTaskHandler;
-    BluetoothSerial SerialBT;
+    BluetoothSerial serialBT;
     char data[40];
     public:
 
     dataLogger(BluetoothSerial &);
-    void begin(BaseType_t);
+    void begin(TaskHandle_t &, const BaseType_t = 0);
     void sendMotorData();
 
     //freeRTOS tasks
@@ -18,27 +17,24 @@ class dataLogger {
   };
 
   dataLogger::dataLogger(BluetoothSerial &serial) :
-  dataLoggerTaskHandler(nullptr),
-  SerialBT(serial) // Initialize with the reference to the passed BluetoothSerial instance
+  serialBT(serial) // Initialize with the reference to the passed BluetoothSerial instance
   {
     memset(data, 0, sizeof(data));
   }
 
 
-  void dataLogger::begin(BaseType_t app_cpu) {
-
-    // dataLoggerTaskHandler = nullptr;
+  void dataLogger::begin(TaskHandle_t &taskHandle, BaseType_t app_cpu) {
   
     const char* TAG = "dataLogger::begin";
 
-    if(dataLoggerTaskHandler == nullptr) {
+    if(taskHandle == nullptr) {
         BaseType_t result = xTaskCreatePinnedToCore(
             &dataLoggerTask,
             "Data_Logger_Task",
             STACK_SIZE,
             this,
             1,
-            &dataLoggerTaskHandler,
+            &taskHandle,
             app_cpu
         );
 
@@ -54,7 +50,7 @@ class dataLogger {
 
   void dataLogger::sendMotorData() {
     snprintf(data, sizeof(data), ",%s,%s,%s,%s,%s", OLEDFunctions::oledSpeed1, OLEDFunctions::oledSpeed2, OLEDFunctions::currentArr1, OLEDFunctions::currentArr2, OLEDFunctions::voltageArr1);
-    SerialBT.println(data);
+    serialBT.println(data);
   }
 
   void dataLogger::dataLoggerTask(void *pvParameters) {

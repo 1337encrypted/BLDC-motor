@@ -12,10 +12,10 @@ constexpr uint8_t pwmPin = 10; // Choose a PWM-capable pin (e.g., D9)
 void setup() {
   // Serial.begin(9600);
   // Set the PWM pin as an output
-  pinMode(pwmPin, OUTPUT);
+  // pinMode(pwmPin, OUTPUT);
   
   // Set up Timer1 with a frequency of 100 kHz
-  Timer1.initialize(50); // Set frequency to 10kHz (10us period)
+  Timer1.initialize(5); // Set frequency to 10kHz (10us period)
   Timer1.pwm(pwmPin, 512); // 50% duty cycle (512/1023)
 }
 

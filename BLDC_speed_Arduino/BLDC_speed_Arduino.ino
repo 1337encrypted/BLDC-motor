@@ -3,27 +3,27 @@
 void setup() {
   Serial.begin(115200);
 
-  OLEDFunctions::begin(app_cpu1);
+  OLEDFunctions::begin(screenRenderTask, app_cpu1);
 
-  SerialBT.begin("Pod1_Bluetooth");
+  serialBT.begin("Pod1_Bluetooth");
 
-  serial.begin(app_cpu1);
+  serial.begin(uartHandle, app_cpu1);
   
-  PMSMMotor1.begin(app_cpu0);
-  motor1.begin(app_cpu0);
+  motorPulse1.begin(leftSpeedTaskHandle, app_cpu0);
+  motorPWM1.begin(leftFrontTaskHandle, app_cpu0);
 
-  PMSMMotor2.begin(app_cpu1);
-  motor2.begin(app_cpu1); 
+  motorPulse2.begin(rightSpeedTaskHandle, app_cpu1);
+  motorPWM2.begin(rightFrontTaskHandle, app_cpu1); 
 
   direction.begin();
 
-  sendDataToPhone.begin(app_cpu0);
+  sendDataToPhone.begin(dataLoggerTaskHandler, app_cpu0);
   
-  controlMotor.begin(app_cpu1);
+  controlMotor.begin(modifyMotorStateTaskHandle, app_cpu1);
 
   // vTaskDelay(100 / portTICK_PERIOD_MS);
 
-  // vTaskDelete(NULL);
+  vTaskDelete(NULL);
 }
 
 void loop() {

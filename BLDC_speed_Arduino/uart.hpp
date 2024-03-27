@@ -39,15 +39,13 @@ private:
     
 public:
     HardwareUart(int = 1024, const char* = "S\n");
-    void begin(const BaseType_t = 1);
+    void begin(TaskHandle_t &, const BaseType_t = 1);
     void sendData();
     void receiveData();
     void printIncomingData(size_t);
 
     //FreeRTOS task
     static void uartTask(void *);
-
-    TaskHandle_t xUartHandle;
 };
 
 HardwareUart::HardwareUart(int buffer_size, const char* str) : 
@@ -69,31 +67,32 @@ received_data{0.00, 0.00, 0.00} {
     ESP_ERROR_CHECK(uart_param_config(PORT_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(PORT_NUM, TXD, RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     ESP_ERROR_CHECK(uart_driver_install(PORT_NUM, uart_buffer_size, uart_buffer_size, 10, &uart_queue, 0));
-
-    xUartHandle = nullptr;
 }
 
-void HardwareUart::begin(const BaseType_t app_cpu) {
-    if(!xUartHandle) {
-        BaseType_t result = xTaskCreatePinnedToCore(
-            uartTask,
-            "uart_task",
-            STACK_SIZE,
-            this,
-            2,
-            &xUartHandle,
-            app_cpu
-        );
+void HardwareUart::begin(TaskHandle_t &taskHandle, const BaseType_t app_cpu) {
 
-        if (result == pdPASS){
-            ESP_LOGI("UARTBEGIN", "Created the UartTask successfully");
-        } else {
-            ESP_LOGI("UARTBEGIN", "Failed to create the UartTask task");
-        }
+  char *TAG = "HardwareUart::begin";
+
+  if(taskHandle == nullptr) {
+    BaseType_t result = xTaskCreatePinnedToCore(
+      &uartTask,
+      "uart_task",
+      STACK_SIZE,
+      this,
+      2,
+      &taskHandle,
+      app_cpu
+    );
+    if (result == pdPASS){
+      ESP_LOGI(TAG, "Created the uart_task successfully");
     } else {
-        ESP_LOGI("UARTBEGIN", "UartTask already created");
+      ESP_LOGI(TAG, "Failed to create the uart_task task");
     }
+  } else {
+    ESP_LOGI(TAG, "uart_task already created");
+  }
 }
+
 
 void HardwareUart::sendData() {
     uart_write_bytes(PORT_NUM, test_str, strlen(test_str));
