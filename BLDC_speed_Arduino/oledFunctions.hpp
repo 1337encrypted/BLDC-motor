@@ -14,7 +14,7 @@ namespace OLEDFunctions {
   char voltageArr1[6];
   
   // Declare functions
-  void begin(TaskHandle_t &, const BaseType_t);
+  void begin(TaskHandle_t &, const BaseType_t = 1);
   void displayRPM();
   void printUartData();
   void renderScreen();
@@ -48,14 +48,14 @@ void OLEDFunctions::begin(TaskHandle_t &taskHandle, const BaseType_t app_cpu) {
   if(taskHandle == nullptr) {
   BaseType_t result = xTaskCreatePinnedToCore(&renderScreenTask, "renderScreenTask", 2048, NULL, 1, &taskHandle, app_cpu);
   if (result == pdPASS){
-          ESP_LOGI(TAG, "Created the renderScreenTask successfully");
-      } else {
-          ESP_LOGI(TAG, "Failed to create the renderScreenTask task");
-      }
+      ESP_LOGI(TAG, "Created the renderScreenTask successfully");
     } else {
-      ESP_LOGI(TAG, "renderScreenTask already created");
+      ESP_LOGI(TAG, "Failed to create the renderScreenTask task");
     }
+  } else {
+    ESP_LOGI(TAG, "renderScreenTask already created");
   }
+}
 
 // Define utility functions 
 void OLEDFunctions::clearBuffer() {

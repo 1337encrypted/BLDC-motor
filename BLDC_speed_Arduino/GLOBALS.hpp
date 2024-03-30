@@ -57,11 +57,11 @@ handleMotorInput controlMotor(motorPWM1,motorPWM2,direction,serialBT);
 
 
 // Task handles
+TaskHandle_t screenRenderTask = nullptr;
+TaskHandle_t uartHandle = nullptr;
 TaskHandle_t leftSpeedTaskHandle = nullptr;
 TaskHandle_t rightSpeedTaskHandle = nullptr;
 TaskHandle_t leftFrontTaskHandle = nullptr;
 TaskHandle_t rightFrontTaskHandle = nullptr;
 TaskHandle_t dataLoggerTaskHandler = nullptr;
 TaskHandle_t modifyMotorStateTaskHandle = nullptr;
-TaskHandle_t screenRenderTask = nullptr;
-TaskHandle_t uartHandle = nullptr;

@@ -10,6 +10,7 @@ void setup() {
     ammeter2.begin();
     voltMeter1.begin();
     buzz.begin();
+    buzz.initBuzzer();
 }
 
 void loop() {
@@ -31,7 +32,7 @@ void loop() {
   char receivedChar = Serial.read(); // Read a single byte
 
     if (receivedChar == 'S') { // Check if the received character is 'S'
-        sendData(); // Send data to ESP32
+      sendData(); // Send data to ESP32
     }
     break;
   }

@@ -37,9 +37,11 @@ public:
   inline BLDCPulseCalculator(gpio_num_t feedBackPin = GPIO_NUM_NC, uint8_t motorId = -1) __attribute__((always_inline));
   inline void calculateValuesInternal(void) __attribute__((always_inline));
   inline void motorSpeed() __attribute__((always_inline));
+
   inline uint16_t getSpeed() __attribute__((always_inline));
-  
   inline void begin(TaskHandle_t &, const BaseType_t = 1) __attribute__((always_inline));
+
+  //FreeRTOS
   static inline void motorSpeedTask(void*) __attribute__((always_inline));
   static void staticCalculateValuesWrapper(void *);
 };

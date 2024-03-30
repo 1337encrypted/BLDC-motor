@@ -16,6 +16,11 @@
         SPEED3,
         SPEED4,
         SPEED5,
+        SPEED6,
+        SPEED7,
+        SPEED8,
+        SPEED9,
+        SPEED10,
         SPEEDINC,
         SPEEDDEC,
         IDLE
@@ -50,6 +55,11 @@
         case '3': return States::SPEED3;
         case '4': return States::SPEED4;
         case '5': return States::SPEED5;
+        case '6': return States::SPEED6;
+        case '7': return States::SPEED7;
+        case '8': return States::SPEED8;
+        case '9': return States::SPEED9;
+        case 'q': return States::SPEED10;
         case 'I': return States::SPEEDINC;
         case 'D': return States::SPEEDDEC;
         default: return States::IDLE; // or any appropriate default state
@@ -76,7 +86,7 @@
   rightDutyCycle(0)
   {}
 
-  inline void handleMotorInput::setSpeed(uint8_t leftDutyCycle, uint8_t rightDutyCycle) {
+  void handleMotorInput::setSpeed(uint8_t leftDutyCycle, uint8_t rightDutyCycle) {
     motorPWM1.setPwm(leftDutyCycle);
     motorPWM2.setPwm(rightDutyCycle);
   }
@@ -138,7 +148,7 @@
       break;
 
       case States::SPEED1:
-        setSpeed(112,112);
+        setSpeed(110,110);
         status = States::IDLE;
       break;
         
@@ -148,17 +158,42 @@
       break;
         
       case States::SPEED3:
-        setSpeed(140,140);
+        setSpeed(142,142);
         status = States::IDLE;
       break;
 
       case States::SPEED4:
-        setSpeed(154,154);
+        setSpeed(158,158);
         status = States::IDLE;
       break;
 
       case States::SPEED5:
-        setSpeed(168,168);
+        setSpeed(174,174);
+        status = States::IDLE;
+      break;
+
+      case States::SPEED6:
+        setSpeed(190,190);
+        status = States::IDLE;
+      break;
+        
+      case States::SPEED7:
+        setSpeed(206,206);
+        status = States::IDLE;
+      break;
+        
+      case States::SPEED8:
+        setSpeed(222,222);
+        status = States::IDLE;
+      break;
+
+      case States::SPEED9:
+        setSpeed(238,238);
+        status = States::IDLE;
+      break;
+
+      case States::SPEED10:
+        setSpeed(255,255);
         status = States::IDLE;
       break;
 

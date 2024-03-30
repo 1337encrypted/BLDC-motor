@@ -10,9 +10,9 @@ void setup() {
   serial.begin(uartHandle, app_cpu1);
   
   motorPulse1.begin(leftSpeedTaskHandle, app_cpu0);
-  motorPWM1.begin(leftFrontTaskHandle, app_cpu0);
-
   motorPulse2.begin(rightSpeedTaskHandle, app_cpu1);
+  
+  motorPWM1.begin(leftFrontTaskHandle, app_cpu0);
   motorPWM2.begin(rightFrontTaskHandle, app_cpu1); 
 
   direction.begin();

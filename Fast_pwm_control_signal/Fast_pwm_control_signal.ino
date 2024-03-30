@@ -15,7 +15,7 @@ void setup() {
   // pinMode(pwmPin, OUTPUT);
   
   // Set up Timer1 with a frequency of 100 kHz
-  Timer1.initialize(5); // Set frequency to 10kHz (10us period)
+  Timer1.initialize(40); // Set frequency to 40kHz (10us period)
   Timer1.pwm(pwmPin, 512); // 50% duty cycle (512/1023)
 }
 
