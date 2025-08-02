@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor Control Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="header-title">
+                <span class="motor-icon">⚡</span>
+                Motor Control Dashboard
+            </h1>
+            <div class="connection-status" id="connectionStatus">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <div class="control-buttons">
+                    <button class="control-btn door-btn" id="doorBtn" onclick="toggleDoors()">
+                        <span class="btn-icon">🔒</span>
+                        <span class="btn-text">LOCKED</span>
+                    </button>
+                    <button class="control-btn lights-btn" id="lightsBtn" onclick="toggleLights()">
+                        <span class="btn-icon">💡</span>
+                        <span class="btn-text">LIGHTS OFF</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Motor Status -->
+            <section class="motor-status">
+                <div class="motor-grid">
+                    <div class="motor-card">
+                        <div class="motor-header">
+                            <h3>Motor 1</h3>
+                            <div class="motor-indicator" id="motor1Indicator"></div>
+                        </div>
+                        <div class="motor-stats">
+                            <div class="stat">
+                                <div class="stat-label">Speed</div>
+                                <div class="stat-value" id="motor1Speed">0 <span class="unit">RPM</span></div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Current</div>
+                                <div class="stat-value" id="motor1Current">0.0 <span class="unit">A</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="motor-card">
+                        <div class="motor-header">
+                            <h3>Motor 2</h3>
+                            <div class="motor-indicator" id="motor2Indicator"></div>
+                        </div>
+                        <div class="motor-stats">
+                            <div class="stat">
+                                <div class="stat-label">Speed</div>
+                                <div class="stat-value" id="motor2Speed">0 <span class="unit">RPM</span></div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Current</div>
+                                <div class="stat-value" id="motor2Current">0.0 <span class="unit">A</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PWM Control -->
+            <section class="pwm-control">
+                <div class="pwm-card">
+                    <div class="pwm-header">
+                        <h3>PWM Control</h3>
+                        <div class="pwm-value" id="pwmValue">0</div>
+                    </div>
+                    <div class="pwm-slider-container">
+                        <div class="slider-labels">
+                            <span>0</span>
+                            <span>255</span>
+                        </div>
+                        <input type="range" class="pwm-slider" id="pwmSlider" 
+                               min="0" max="255" value="0" 
+                               oninput="updatePWM(this.value)" 
+                               onchange="setPWM(this.value)">
+                        <div class="slider-track" id="sliderTrack"></div>
+                    </div>
+                    <div class="pwm-presets">
+                        <button class="preset-btn" onclick="setPresetPWM(0)">Stop</button>
+                        <button class="preset-btn" onclick="setPresetPWM(64)">25%</button>
+                        <button class="preset-btn" onclick="setPresetPWM(128)">50%</button>
+                        <button class="preset-btn" onclick="setPresetPWM(192)">75%</button>
+                        <button class="preset-btn" onclick="setPresetPWM(255)">Max</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Info -->
+            <section class="system-info">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-label">System Voltage</div>
+                        <div class="info-value" id="systemVoltage">0.0 <span class="unit">V</span></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">WiFi Signal</div>
+                        <div class="info-value" id="wifiSignal">-0 <span class="unit">dBm</span></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Uptime</div>
+                        <div class="info-value" id="systemUptime">0:00:00</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Free Heap</div>
+                        <div class="info-value" id="freeHeap">0 <span class="unit">KB</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emergency Stop -->
+            <section class="emergency-section">
+                <button class="emergency-btn" id="emergencyBtn" onclick="emergencyStop()">
+                    <span class="emergency-icon">🛑</span>
+                    EMERGENCY STOP
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <span>Motor Control System v1.0</span>
+                <span id="lastUpdate">Last update: Never</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

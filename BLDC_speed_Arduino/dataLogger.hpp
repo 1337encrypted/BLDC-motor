@@ -49,7 +49,7 @@ class dataLogger {
   }
 
   void dataLogger::sendMotorData() {
-    snprintf(data, sizeof(data), ",%s,%s,%s,%s,%s", OLEDFunctions::oledSpeed1, OLEDFunctions::oledSpeed2, OLEDFunctions::currentArr1, OLEDFunctions::currentArr2, OLEDFunctions::voltageArr1);
+    // snprintf(data, sizeof(data), ",%s,%s,%s,%s,%s", OLEDFunctions::oledSpeed1, OLEDFunctions::oledSpeed2, OLEDFunctions::currentArr1, OLEDFunctions::currentArr2, OLEDFunctions::voltageArr1);
     serialBT.println(data);
   }
 
