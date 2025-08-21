@@ -41,6 +41,7 @@ public:
     
     // WiFi management
     bool connectWiFi(const char* ssid, const char* password, unsigned long timeout = 30000);
+    bool startAccessPoint(const char* ssid, const char* password, IPAddress ip, IPAddress gateway, IPAddress subnet);
     String getLocalIP();
 };
 
@@ -102,8 +103,8 @@ void WebServerManager::setupStaticRoutes() {
             // Temporary: serve a basic test page until LittleFS files are uploaded
             String html = "<!DOCTYPE html><html><head><title>Motor Control System</title></head><body>";
             html += "<h1>ESP32 Motor Control System</h1>";
-            html += "<p>✅ Web server is running!</p>";
-            html += "<p>⚠️ Upload web files to LittleFS to see the full interface.</p>";
+            html += "<p>:) Web server is running!</p>";
+            html += "<p>Upload web files to LittleFS to see the full interface.</p>";
             html += "<p><strong>API Test Links:</strong></p>";
             html += "<ul>";
             html += "<li><a href='/api/system'>/api/system</a> - System info</li>";
@@ -352,6 +353,39 @@ bool WebServerManager::connectWiFi(const char* ssid, const char* password, unsig
     }
 }
 
+bool WebServerManager::startAccessPoint(const char* ssid, const char* password, IPAddress ip, IPAddress gateway, IPAddress subnet) {
+    const char* TAG = "WebServerManager::startAccessPoint";
+    
+    // Stop any existing WiFi connections
+    WiFi.mode(WIFI_OFF);
+    delay(100);
+    
+    // Configure Access Point
+    WiFi.mode(WIFI_AP);
+    WiFi.softAPConfig(ip, gateway, subnet);
+    
+    bool success = WiFi.softAP(ssid, password);
+    
+    if (success) {
+        ESP_LOGI(TAG, "Access Point started successfully!");
+        ESP_LOGI(TAG, "SSID: %s", ssid);
+        ESP_LOGI(TAG, "IP address: %s", WiFi.softAPIP().toString().c_str());
+        ESP_LOGI(TAG, "Gateway: %s", gateway.toString().c_str());
+        ESP_LOGI(TAG, "Subnet: %s", subnet.toString().c_str());
+        
+        // Wait for AP to be fully started
+        delay(1000);
+        return true;
+    } else {
+        ESP_LOGE(TAG, "Failed to start Access Point!");
+        return false;
+    }
+}
+
 String WebServerManager::getLocalIP() {
-    return WiFi.localIP().toString();
+    if (WiFi.getMode() == WIFI_AP) {
+        return WiFi.softAPIP().toString();
+    } else {
+        return WiFi.localIP().toString();
+    }
 }

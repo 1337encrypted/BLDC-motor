@@ -2,152 +2,238 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motor Control Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <title>BLDC Motor Control</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="dashboard-body">
     <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <h1 class="header-title">
-                <span class="motor-icon">⚡</span>
-                Motor Control Dashboard
-            </h1>
-            <div class="connection-status" id="connectionStatus">
-                <div class="status-indicator" id="statusIndicator"></div>
-                <span id="statusText">Connecting...</span>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="connection-section">
+                <div class="connection-badge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span class="status-text" id="statusText">Connecting</span>
+                </div>
+                <div class="command-status" id="commandStatus">
+                    <svg class="status-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="logo-container">
+                <img src="https://gridflow.in/gridflowLogo.png" alt="GridFlow Logo" class="gridflow-logo">
+            </div>
+            
+            <div class="emergency-button" onclick="emergencyStop()">
+                <span>Emergency Stop</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
+    <!-- Main Dashboard -->
+    <main class="dashboard-main">
+        <div class="dashboard-container">
             
-            <!-- Control Panel -->
-            <section class="control-panel">
-                <div class="control-buttons">
-                    <button class="control-btn door-btn" id="doorBtn" onclick="toggleDoors()">
-                        <span class="btn-icon">🔒</span>
-                        <span class="btn-text">LOCKED</span>
-                    </button>
-                    <button class="control-btn lights-btn" id="lightsBtn" onclick="toggleLights()">
-                        <span class="btn-icon">💡</span>
-                        <span class="btn-text">LIGHTS OFF</span>
-                    </button>
-                </div>
-            </section>
-
-            <!-- Motor Status -->
-            <section class="motor-status">
-                <div class="motor-grid">
-                    <div class="motor-card">
-                        <div class="motor-header">
-                            <h3>Motor 1</h3>
-                            <div class="motor-indicator" id="motor1Indicator"></div>
-                        </div>
-                        <div class="motor-stats">
-                            <div class="stat">
-                                <div class="stat-label">Speed</div>
-                                <div class="stat-value" id="motor1Speed">0 <span class="unit">RPM</span></div>
+            <!-- Motor Status Panel -->
+            <section class="stats-panel">
+                <div class="motor-section">
+                    <div class="motor-cards">
+                        <!-- Motor 1 -->
+                        <article class="motor-card rectangle-card">
+                            <header class="motor-header">
+                                <h3 class="motor-label">Motor 1</h3>
+                                <div class="motor-status" id="motor1Indicator">
+                                    <span class="status-dot offline"></span>
+                                </div>
+                            </header>
+                            <div class="motor-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Speed:</span>
+                                    <span class="metric-value" id="motor1Speed">0 <span class="unit">RPM</span></span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Current:</span>
+                                    <span class="metric-value" id="motor1Current">0.0 <span class="unit">A</span></span>
+                                </div>
                             </div>
-                            <div class="stat">
-                                <div class="stat-label">Current</div>
-                                <div class="stat-value" id="motor1Current">0.0 <span class="unit">A</span></div>
-                            </div>
-                        </div>
-                    </div>
+                        </article>
 
-                    <div class="motor-card">
-                        <div class="motor-header">
-                            <h3>Motor 2</h3>
-                            <div class="motor-indicator" id="motor2Indicator"></div>
-                        </div>
-                        <div class="motor-stats">
-                            <div class="stat">
-                                <div class="stat-label">Speed</div>
-                                <div class="stat-value" id="motor2Speed">0 <span class="unit">RPM</span></div>
+                        <!-- Motor 2 -->
+                        <article class="motor-card rectangle-card">
+                            <header class="motor-header">
+                                <h3 class="motor-label">Motor 2</h3>
+                                <div class="motor-status" id="motor2Indicator">
+                                    <span class="status-dot offline"></span>
+                                </div>
+                            </header>
+                            <div class="motor-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Speed:</span>
+                                    <span class="metric-value" id="motor2Speed">0 <span class="unit">RPM</span></span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Current:</span>
+                                    <span class="metric-value" id="motor2Current">0.0 <span class="unit">A</span></span>
+                                </div>
                             </div>
-                            <div class="stat">
-                                <div class="stat-label">Current</div>
-                                <div class="stat-value" id="motor2Current">0.0 <span class="unit">A</span></div>
+                        </article>
+
+                        <!-- Motor 3 -->
+                        <article class="motor-card rectangle-card">
+                            <header class="motor-header">
+                                <h3 class="motor-label">Motor 3</h3>
+                                <div class="motor-status" id="motor3Indicator">
+                                    <span class="status-dot offline"></span>
+                                </div>
+                            </header>
+                            <div class="motor-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Speed:</span>
+                                    <span class="metric-value" id="motor3Speed">0 <span class="unit">RPM</span></span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Current:</span>
+                                    <span class="metric-value" id="motor3Current">0.0 <span class="unit">A</span></span>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        </article>
 
-            <!-- PWM Control -->
-            <section class="pwm-control">
-                <div class="pwm-card">
-                    <div class="pwm-header">
-                        <h3>PWM Control</h3>
-                        <div class="pwm-value" id="pwmValue">0</div>
-                    </div>
-                    <div class="pwm-slider-container">
-                        <div class="slider-labels">
-                            <span>0</span>
-                            <span>255</span>
-                        </div>
-                        <input type="range" class="pwm-slider" id="pwmSlider" 
-                               min="0" max="255" value="0" 
-                               oninput="updatePWM(this.value)" 
-                               onchange="setPWM(this.value)">
-                        <div class="slider-track" id="sliderTrack"></div>
-                    </div>
-                    <div class="pwm-presets">
-                        <button class="preset-btn" onclick="setPresetPWM(0)">Stop</button>
-                        <button class="preset-btn" onclick="setPresetPWM(64)">25%</button>
-                        <button class="preset-btn" onclick="setPresetPWM(128)">50%</button>
-                        <button class="preset-btn" onclick="setPresetPWM(192)">75%</button>
-                        <button class="preset-btn" onclick="setPresetPWM(255)">Max</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- System Info -->
-            <section class="system-info">
-                <div class="info-grid">
-                    <div class="info-card">
-                        <div class="info-label">System Voltage</div>
-                        <div class="info-value" id="systemVoltage">0.0 <span class="unit">V</span></div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">WiFi Signal</div>
-                        <div class="info-value" id="wifiSignal">-0 <span class="unit">dBm</span></div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Uptime</div>
-                        <div class="info-value" id="systemUptime">0:00:00</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Free Heap</div>
-                        <div class="info-value" id="freeHeap">0 <span class="unit">KB</span></div>
+                        <!-- Motor 4 -->
+                        <article class="motor-card rectangle-card">
+                            <header class="motor-header">
+                                <h3 class="motor-label">Motor 4</h3>
+                                <div class="motor-status" id="motor4Indicator">
+                                    <span class="status-dot offline"></span>
+                                </div>
+                            </header>
+                            <div class="motor-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Speed:</span>
+                                    <span class="metric-value" id="motor4Speed">0 <span class="unit">RPM</span></span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Current:</span>
+                                    <span class="metric-value" id="motor4Current">0.0 <span class="unit">A</span></span>
+                                </div>
+                            </div>
+                        </article>
                     </div>
                 </div>
             </section>
 
-            <!-- Emergency Stop -->
-            <section class="emergency-section">
-                <button class="emergency-btn" id="emergencyBtn" onclick="emergencyStop()">
-                    <span class="emergency-icon">🛑</span>
-                    EMERGENCY STOP
-                </button>
-            </section>
+            <!-- Controls Panel -->
+            <aside class="controls-panel">
+                
+                <!-- System Information -->
+                <section class="control-section">
+                    <div class="system-info-panel">
+                        <div class="system-info-grid">
+                            <div class="system-info-item">
+                                <span class="info-label">Voltage:</span>
+                                <span class="info-value" id="systemVoltage">0.0V</span>
+                            </div>
+                            <div class="system-info-item">
+                                <span class="info-label">WiFi:</span>
+                                <span class="info-value" id="wifiSignal">-0 dBm</span>
+                            </div>
+                            <div class="system-info-item">
+                                <span class="info-label">Uptime:</span>
+                                <span class="info-value" id="systemUptime">0:00:00</span>
+                            </div>
+                            <div class="system-info-item">
+                                <span class="info-label">Memory:</span>
+                                <span class="info-value" id="freeHeap">0 KB</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- PWM Control -->
+                <section class="control-section">
+                    <div class="pwm-control">
+                        <div class="pwm-display">
+                            <span class="pwm-label">PWM: <span id="pwmValue">0</span>/255</span>
+                        </div>
+                        
+                        <div class="slider-container">
+                            <input type="range" 
+                                   class="pwm-slider" 
+                                   id="pwmSlider" 
+                                   min="0" 
+                                   max="255" 
+                                   value="0" 
+                                   oninput="updatePWM(this.value)" 
+                                   onchange="setPWM(this.value)">
+                        </div>
+                        
+                        <div class="preset-controls">
+                            <button class="preset-btn" onclick="setPresetPWM(0)">Stop</button>
+                            <button class="preset-btn" onclick="setPresetPWM(64)">25%</button>
+                            <button class="preset-btn" onclick="setPresetPWM(128)">50%</button>
+                            <button class="preset-btn" onclick="setPresetPWM(192)">75%</button>
+                            <button class="preset-btn" onclick="setPresetPWM(255)">Max</button>
+                        </div>
+                    </div>
+                </section>
 
+                <!-- Hardware Controls -->
+                <section class="control-section">
+                    <div class="hardware-controls">
+                        <button class="hardware-btn door-control" 
+                                id="leftDoorBtn" 
+                                onclick="toggleLeftDoor()">
+                            <svg class="hardware-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                <path d="m7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Left Door
+                        </button>
+                        
+                        <button class="hardware-btn door-control" 
+                                id="rightDoorBtn" 
+                                onclick="toggleRightDoor()">
+                            <svg class="hardware-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                <path d="m7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Right Door
+                        </button>
+                        
+                        <button class="hardware-btn light-control" 
+                                id="leftLightBtn" 
+                                onclick="toggleLeftLight()">
+                            <svg class="hardware-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                            </svg>
+                            Left Light
+                        </button>
+                        
+                        <button class="hardware-btn light-control" 
+                                id="rightLightBtn" 
+                                onclick="toggleRightLight()">
+                            <svg class="hardware-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                            </svg>
+                            Right Light
+                        </button>
+                    </div>
+                </section>
+            </aside>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <span>Motor Control System v1.0</span>
-                <span id="lastUpdate">Last update: Never</span>
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <span class="version">BLDC Control System v2.0</span>
+                <span class="update-time" id="lastUpdate">Last update: Never</span>
             </div>
         </div>
     </footer>

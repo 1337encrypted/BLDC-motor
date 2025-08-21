@@ -38,12 +38,7 @@ PC817A voltMeter1(voltagePin1, resADC);
 // Interface objects
 buzzer buzz(buzzPin);
 
-// UART data structure and functions
-typedef struct {
-    float current1;
-    float current2;
-    float voltage1;
-} MotorCharacteristicsData;
+// UART data structure imported from UART.hpp
 
 // Global data instance
 MotorCharacteristicsData data;
@@ -58,15 +53,15 @@ void sendData() {
     Serial.write(buffer, sizeof(buffer));
 }
 
-// Debug print function
+// Debug print function (memory optimized)
 void motorCharacteristicsprintData() {
-    Serial.print("Current1: ");
+    Serial.print(F("Current1: "));
     Serial.print(data.current1);
-    Serial.print(" A, Current2: ");
+    Serial.print(F(" A, Current2: "));
     Serial.print(data.current2);
-    Serial.print(" A, Voltage: ");
+    Serial.print(F(" A, Voltage: "));
     Serial.print(data.voltage1);
-    Serial.println(" V");
+    Serial.println(F(" V"));
 }
 
 // OLED display update function (forward declaration)

@@ -1,17 +1,35 @@
 #include "GLOBALS.hpp"
 
+// Global variables for runtime mode switching
+bool currentUseAPMode = DEFAULT_USE_AP_MODE;
+Preferences preferences;
+
+// Function declarations
+void loadWiFiMode();
+void saveWiFiMode(bool useAPMode);
+void switchWiFiMode(bool useAPMode);
+void sendWiFiModeToArduino(bool useAPMode, const String& ip);
+void setupWiFiModeButton();
+void checkWiFiModeButton();
+
 // Object Instantiation
 PwmGenerator motorPWM1(motorPwmPin1, frequency, resolution);
 PwmGenerator motorPWM2(motorPwmPin2, frequency, resolution);
 BLDCPulseCalculator motorPulse1(feedBackPin1, motorId1);
 BLDCPulseCalculator motorPulse2(feedBackPin2, motorId2);
 MotorDirection direction;
-DoorLock doorLock(doorLock1Pin, doorLock2Pin, doorLock3Pin, doorLock4Pin);
 UARTCurrentSensor currentSensor;
+
+// New Modular Objects
+Light leftLight(leftLightPin, "Left Light");
+Light rightLight(rightLightPin, "Right Light");
+SingleDoorLock frontLeftDoor(doorLock1Pin, DoorPosition::FRONT_LEFT, "Front Left Door");
+SingleDoorLock frontRightDoor(doorLock2Pin, DoorPosition::FRONT_RIGHT, "Front Right Door");
+SingleDoorLock rearLeftDoor(doorLock3Pin, DoorPosition::REAR_LEFT, "Rear Left Door");
+SingleDoorLock rearRightDoor(doorLock4Pin, DoorPosition::REAR_RIGHT, "Rear Right Door");
 
 WebServerManager webServer;
 DataCollector dataCollector;
-ControlInterface controlInterface;
 
 // Task Handles
 TaskHandle_t motor1SpeedTaskHandle = nullptr;
@@ -20,7 +38,106 @@ TaskHandle_t motor1PWMTaskHandle = nullptr;
 TaskHandle_t motor2PWMTaskHandle = nullptr;
 TaskHandle_t currentSensorTaskHandle = nullptr;
 TaskHandle_t dataCollectorTaskHandle = nullptr;
-TaskHandle_t webSocketTaskHandle = nullptr;
+
+// WiFi Mode Management Functions
+void loadWiFiMode() {
+    preferences.begin("motor_config", false);  // false = read/write mode
+    currentUseAPMode = preferences.getBool("useAPMode", DEFAULT_USE_AP_MODE);
+    preferences.end();
+    
+    Serial.printf("📂 Loaded WiFi mode from NVS: %s\n", 
+                  currentUseAPMode ? "AP Mode (Field)" : "Station Mode (Home/Office)");
+}
+
+void saveWiFiMode(bool useAPMode) {
+    preferences.begin("motor_config", false);
+    preferences.putBool("useAPMode", useAPMode);
+    preferences.end();
+    
+    Serial.printf("💾 Saved WiFi mode to NVS: %s\n", 
+                  useAPMode ? "AP Mode (Field)" : "Station Mode (Home/Office)");
+}
+
+void switchWiFiMode(bool useAPMode) {
+    if (currentUseAPMode == useAPMode) {
+        Serial.println("🔄 WiFi mode already set to requested mode");
+        return;
+    }
+    
+    Serial.printf("🔄 Switching WiFi mode: %s -> %s\n",
+                  currentUseAPMode ? "AP Mode" : "Station Mode",
+                  useAPMode ? "AP Mode" : "Station Mode");
+    
+    // Save new mode to NVS
+    saveWiFiMode(useAPMode);
+    currentUseAPMode = useAPMode;
+    
+    // Send mode change to Arduino
+    String currentIP = WiFi.getMode() == WIFI_AP ? WiFi.softAPIP().toString() : WiFi.localIP().toString();
+    sendWiFiModeToArduino(useAPMode, currentIP);
+    
+    Serial.println("⚠️  WiFi mode changed! System will restart in 3 seconds...");
+    delay(3000);
+    ESP.restart();  // Restart to apply new WiFi mode
+}
+
+void sendWiFiModeToArduino(bool useAPMode, const String& ip) {
+    // Send IP address first
+    currentSensor.sendIPAddress(ip);
+    
+    // Small delay then send WiFi mode info
+    delay(200);
+    currentSensor.sendWiFiMode(useAPMode, ip);
+    
+    Serial.printf("📡 Sent mode info to Arduino: %s, IP: %s\n", 
+                  useAPMode ? "AP Mode (Field)" : "Station Mode (Home/Office)", ip.c_str());
+}
+
+// Physical button setup and handling
+void setupWiFiModeButton() {
+    pinMode(WIFI_MODE_BUTTON_PIN, INPUT_PULLUP);
+    Serial.println("🔘 WiFi mode button initialized (GPIO 0 - Boot button)");
+    Serial.println("💡 Hold button for 3 seconds to toggle WiFi mode");
+}
+
+void checkWiFiModeButton() {
+    static unsigned long buttonPressStart = 0;
+    static bool buttonPressed = false;
+    static bool buttonProcessed = false;
+    
+    bool currentButtonState = (digitalRead(WIFI_MODE_BUTTON_PIN) == LOW);
+    
+    if (currentButtonState && !buttonPressed) {
+        // Button just pressed
+        buttonPressed = true;
+        buttonProcessed = false;
+        buttonPressStart = millis();
+        Serial.println("🔘 WiFi mode button pressed...");
+        
+    } else if (!currentButtonState && buttonPressed) {
+        // Button just released
+        buttonPressed = false;
+        unsigned long pressDuration = millis() - buttonPressStart;
+        
+        if (pressDuration >= 3000 && !buttonProcessed) {
+            // Long press detected - toggle WiFi mode
+            Serial.println("🔄 Long press detected! Toggling WiFi mode...");
+            switchWiFiMode(!currentUseAPMode);
+        } else if (pressDuration < 3000) {
+            Serial.printf("🔘 Short press (%lu ms) - Hold for 3+ seconds to switch mode\n", pressDuration);
+        }
+        
+    } else if (currentButtonState && buttonPressed) {
+        // Button is being held
+        unsigned long pressDuration = millis() - buttonPressStart;
+        
+        if (pressDuration >= 3000 && !buttonProcessed) {
+            // Long press threshold reached
+            buttonProcessed = true;
+            Serial.println("🎯 Long press confirmed! Release button to toggle WiFi mode...");
+        }
+    }
+}
 
 void addMotorControlAPI() {
     WebServer* server = webServer.getServer();
@@ -55,20 +172,99 @@ void addMotorControlAPI() {
                 currentPWM = pwm;
             }
             
+            // Handle individual lights control
             if (doc.containsKey("lights")) {
-                bool lights = doc["lights"];
-                gpio_set_level(lightsPin, lights ? 1 : 0);
-                lightsOn = lights;
+                JsonVariant lightsVariant = doc["lights"];
+                
+                // Check if lights is a boolean (legacy support)
+                if (lightsVariant.is<bool>()) {
+                    bool lightState = lightsVariant.as<bool>();
+                    leftLight.setState(lightState);
+                    rightLight.setState(lightState);
+                    leftLightOn = rightLightOn = lightState;
+                }
+                // Handle as object (new individual control)
+                else if (lightsVariant.is<JsonObject>()) {
+                    JsonObject lights = lightsVariant.as<JsonObject>();
+                    
+                    if (lights.containsKey("left")) {
+                        String leftAction = lights["left"];
+                        if (leftAction == "toggle") {
+                            leftLight.toggle();
+                            leftLightOn = leftLight.isOn();
+                        } else if (leftAction == "on") {
+                            leftLight.turnOn();
+                            leftLightOn = true;
+                        } else if (leftAction == "off") {
+                            leftLight.turnOff();
+                            leftLightOn = false;
+                        }
+                    }
+                    if (lights.containsKey("right")) {
+                        String rightAction = lights["right"];
+                        if (rightAction == "toggle") {
+                            rightLight.toggle();
+                            rightLightOn = rightLight.isOn();
+                        } else if (rightAction == "on") {
+                            rightLight.turnOn();
+                            rightLightOn = true;
+                        } else if (rightAction == "off") {
+                            rightLight.turnOff();
+                            rightLightOn = false;
+                        }
+                    }
+                }
             }
             
+            // Handle individual doors control
             if (doc.containsKey("doors")) {
                 JsonObject doors = doc["doors"];
+                
+                // Individual door control
+                if (doors.containsKey("left")) {
+                    String leftAction = doors["left"];
+                    if (leftAction == "toggle") {
+                        frontLeftDoor.toggle();
+                        door1Locked = frontLeftDoor.isLockLocked();
+                    } else if (leftAction == "lock") {
+                        frontLeftDoor.lock();
+                        door1Locked = true;
+                    } else if (leftAction == "unlock") {
+                        frontLeftDoor.unlock();
+                        door1Locked = false;
+                    }
+                }
+                if (doors.containsKey("right")) {
+                    String rightAction = doors["right"];
+                    if (rightAction == "toggle") {
+                        frontRightDoor.toggle();
+                        door2Locked = frontRightDoor.isLockLocked();
+                    } else if (rightAction == "lock") {
+                        frontRightDoor.lock();
+                        door2Locked = true;
+                    } else if (rightAction == "unlock") {
+                        frontRightDoor.unlock();
+                        door2Locked = false;
+                    }
+                }
+                
+                // Legacy support for all doors
                 if (doors.containsKey("lock_all")) {
                     bool lockAll = doors["lock_all"];
                     if (lockAll) {
-                        doorLock.lockAllDoors();
+                        frontLeftDoor.lock();
+                        frontRightDoor.lock();
+                        rearLeftDoor.lock();
+                        rearRightDoor.lock();
+                        door1Locked = door2Locked = door3Locked = door4Locked = true;
+                        doorsLocked = true;
                     } else {
-                        doorLock.unlockAllDoors();
+                        frontLeftDoor.unlock();
+                        frontRightDoor.unlock();
+                        rearLeftDoor.unlock();
+                        rearRightDoor.unlock();
+                        door1Locked = door2Locked = door3Locked = door4Locked = false;
+                        doorsLocked = false;
                     }
                 }
             }
@@ -95,11 +291,73 @@ void addMotorControlAPI() {
         server->sendHeader("Access-Control-Allow-Headers", "Content-Type");
         server->send(200);
     });
+    
+    // WiFi Mode Management API
+    server->on("/api/wifi/mode", HTTP_GET, [server]() {
+        DynamicJsonDocument doc(512);
+        doc["currentMode"] = currentUseAPMode ? "AP" : "Station";
+        doc["modeDescription"] = currentUseAPMode ? "Field Mode (Access Point)" : "Home/Office Mode (Station)";
+        doc["canSwitch"] = true;
+        doc["currentIP"] = WiFi.getMode() == WIFI_AP ? WiFi.softAPIP().toString() : WiFi.localIP().toString();
+        doc["ssid"] = currentUseAPMode ? AP_SSID : WIFI_SSID;
+        
+        String response;
+        serializeJson(doc, response);
+        server->sendHeader("Access-Control-Allow-Origin", "*");
+        server->send(200, "application/json", response);
+    });
+    
+    server->on("/api/wifi/switch", HTTP_POST, [server]() {
+        if (server->hasArg("plain")) {
+            DynamicJsonDocument doc(512);
+            DeserializationError error = deserializeJson(doc, server->arg("plain"));
+            
+            if (!error && doc.containsKey("mode")) {
+                String newMode = doc["mode"];
+                bool useAPMode = (newMode == "AP");
+                
+                // Send immediate response before restart
+                server->sendHeader("Access-Control-Allow-Origin", "*");
+                server->send(200, "application/json", "{\"status\":\"switching\",\"message\":\"WiFi mode changing, system will restart\"}");
+                
+                // Switch mode (this will restart the system)
+                delay(100);  // Allow response to be sent
+                switchWiFiMode(useAPMode);
+            } else {
+                server->sendHeader("Access-Control-Allow-Origin", "*");
+                server->send(400, "application/json", "{\"error\":\"Invalid mode specified. Use 'AP' or 'Station'\"}");
+            }
+        } else {
+            server->sendHeader("Access-Control-Allow-Origin", "*");
+            server->send(400, "application/json", "{\"error\":\"No data received\"}");
+        }
+    });
+    
+    // CORS for WiFi endpoints
+    server->on("/api/wifi/mode", HTTP_OPTIONS, [server]() {
+        server->sendHeader("Access-Control-Allow-Origin", "*");
+        server->sendHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        server->sendHeader("Access-Control-Allow-Headers", "Content-Type");
+        server->send(200);
+    });
+    
+    server->on("/api/wifi/switch", HTTP_OPTIONS, [server]() {
+        server->sendHeader("Access-Control-Allow-Origin", "*");
+        server->sendHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        server->sendHeader("Access-Control-Allow-Headers", "Content-Type");
+        server->send(200);
+    });
 }
 
 void setup() {
     Serial.begin(115200);
     Serial.println("\n=== Motor Control WebServer Starting ===");
+    
+    // Load WiFi mode from NVS (Non-Volatile Storage)
+    loadWiFiMode();
+    
+    // Setup physical WiFi mode button
+    setupWiFiModeButton();
     
     // Initialize LittleFS for web files
     if(!LittleFS.begin(true)) {
@@ -108,37 +366,45 @@ void setup() {
     }
     Serial.println("✓ LittleFS initialized");
     
-    // Initialize WiFi
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    Serial.print("Connecting to WiFi");
-    
-    int attempts = 0;
-    while (WiFi.status() != WL_CONNECTED && attempts < 20) {
-        delay(500);
-        Serial.print(".");
-        attempts++;
-    }
-    
-    if (WiFi.status() == WL_CONNECTED) {
-        Serial.println();
-        Serial.print("✓ WiFi connected! IP: ");
-        Serial.println(WiFi.localIP());
+    // Initialize WiFi based on loaded mode
+    String localIP;
+    if (currentUseAPMode) {
+        // Access Point Mode - ESP32 becomes a hotspot
+        Serial.println("🌐 Starting WiFi Access Point mode...");
+        Serial.printf("SSID: %s\n", AP_SSID);
+        Serial.printf("Password: %s\n", AP_PASSWORD);
+        
+        if (webServer.startAccessPoint(AP_SSID, AP_PASSWORD, AP_IP, AP_GATEWAY, AP_SUBNET)) {
+            localIP = WiFi.softAPIP().toString();
+            Serial.println("✅ Access Point started successfully!");
+            Serial.printf("📱 Connect to WiFi: %s\n", AP_SSID);
+            Serial.printf("🔒 Password: %s\n", AP_PASSWORD);
+            Serial.printf("🌐 Web Interface: http://%s\n", localIP.c_str());
+            Serial.println("📍 Perfect for field operation - no internet required!");
+        } else {
+            Serial.println("❌ Failed to start Access Point!");
+            return;
+        }
     } else {
-        Serial.println("\n✗ WiFi connection failed!");
-        return;
+        // Station Mode - Connect to existing WiFi network
+        Serial.println("🔗 Connecting to existing WiFi network...");
+        Serial.printf("SSID: %s\n", WIFI_SSID);
+        
+        if (webServer.connectWiFi(WIFI_SSID, WIFI_PASSWORD, 30000)) {
+            localIP = WiFi.localIP().toString();
+            Serial.println("✅ WiFi connected successfully!");
+            Serial.printf("🌐 Web Interface: http://%s\n", localIP.c_str());
+        } else {
+            Serial.println("❌ WiFi connection failed!");
+            Serial.println("💡 Consider enabling AP mode for field operation");
+            return;
+        }
     }
     
-    // Initialize GPIO for lights control
-    gpio_config_t gpioLightsConfig = {
-        .pin_bit_mask = (1ULL << lightsPin),
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE
-    };
-    gpio_config(&gpioLightsConfig);
-    gpio_set_level(lightsPin, 0);
-    Serial.println("✓ Lights GPIO initialized");
+    // Initialize individual lights
+    leftLight.begin();
+    rightLight.begin();
+    Serial.println("✓ Individual lights initialized");
     
     // Initialize PWM Generators (Core 0 - Motor Control)
     motorPWM1.begin(motor1PWMTaskHandle, app_cpu0);
@@ -150,13 +416,28 @@ void setup() {
     motorPulse2.begin(motor2SpeedTaskHandle, app_cpu1);
     Serial.println("✓ Speed calculators initialized on Core 1");
     
-    // Initialize Door Lock System (Core 0 - Hardware Control)
-    doorLock.begin();
-    Serial.println("✓ Door lock system initialized");
+    // Initialize individual door locks
+    frontLeftDoor.begin();
+    frontRightDoor.begin();
+    rearLeftDoor.begin();
+    rearRightDoor.begin();
+    Serial.println("✓ Individual door lock system initialized");
     
     // Initialize Current Sensor UART Communication (Core 0 - Hardware)
     currentSensor.begin(currentSensorTaskHandle, app_cpu0);
     Serial.println("✓ Current sensor UART initialized on Core 0");
+    
+    // Send IP address to Arduino Nano for OLED display (once after initialization)
+    if (!localIP.isEmpty() && localIP != "0.0.0.0") {
+        Serial.printf("📡 Transmitting IP address to Arduino Nano: %s\n", localIP.c_str());
+        
+        // Allow UART task to start
+        delay(500);
+        
+        // Send IP address via UART
+        currentSensor.sendIPAddress(localIP);
+        Serial.println("✓ IP address sent to Arduino Nano OLED");
+    }
     
     // Wait for network stack to fully initialize
     delay(1000);
@@ -178,17 +459,25 @@ void setup() {
     dataCollector.begin();
     Serial.println("✓ Data collector initialized on Core 1");
     
-    // Initialize Control Interface
-    controlInterface.begin();
-    Serial.println("✓ Control interface initialized");
     
     // Add motor control API endpoints
     addMotorControlAPI();
     Serial.println("✓ Motor control API endpoints added");
     
+    // Send initial mode and IP to Arduino Nano
+    sendWiFiModeToArduino(currentUseAPMode, localIP);
+    
     Serial.println("=== System Initialization Complete ===");
-    Serial.print("Web Interface: http://");
-    Serial.println(WiFi.localIP());
+    if (currentUseAPMode) {
+        Serial.printf("📱 WiFi Network: %s (Password: %s)\n", AP_SSID, AP_PASSWORD);
+        Serial.printf("🌐 Web Interface: http://%s\n", localIP.c_str());
+        Serial.println("📍 Field Operation Mode - Connect directly to ESP32");
+        Serial.println("🔄 Switch to Home/Office mode via web interface");
+    } else {
+        Serial.printf("🌐 Web Interface: http://%s\n", localIP.c_str());
+        Serial.println("🏠 Home/Office Mode - Connected to existing WiFi");
+        Serial.println("🔄 Switch to Field mode via web interface");
+    }
     Serial.println("==========================================");
     
     // Print memory status
@@ -200,10 +489,13 @@ void loop() {
     // Handle HTTP requests - CRITICAL for synchronous WebServer
     webServer.getServer()->handleClient();
     
-    // Check WiFi connection and attempt reconnection if needed
+    // Check for physical WiFi mode button presses
+    checkWiFiModeButton();
+    
+    // Check WiFi connection and attempt reconnection if needed (only in Station mode)
     static unsigned long lastWiFiCheck = 0;
     if (millis() - lastWiFiCheck > 30000) { // Check every 30 seconds
-        if (WiFi.status() != WL_CONNECTED) {
+        if (!currentUseAPMode && WiFi.status() != WL_CONNECTED) {
             Serial.println("WiFi disconnected, attempting reconnection...");
             WiFi.reconnect();
         }

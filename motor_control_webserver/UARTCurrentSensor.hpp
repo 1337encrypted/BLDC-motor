@@ -55,6 +55,12 @@ public:
     void sendDebugCommand();
     void sendResetCommand();
     
+    // IP address transmission
+    void sendIPAddress(const String& ipAddress);
+    
+    // WiFi mode transmission
+    void sendWiFiMode(bool isAPMode, const String& ipAddress);
+    
     // FreeRTOS task
     static void uartCurrentSensorTask(void *pvParameters);
 };
@@ -159,6 +165,43 @@ void UARTCurrentSensor::sendDebugCommand() {
 
 void UARTCurrentSensor::sendResetCommand() {
     uart_write_bytes(CURRENT_SENSOR_PORT, "R", 1);
+}
+
+void UARTCurrentSensor::sendIPAddress(const String& ipAddress) {
+    const char* TAG = "UARTCurrentSensor::sendIPAddress";
+    
+    if (ipAddress.length() == 0 || ipAddress == "0.0.0.0") {
+        ESP_LOGW(TAG, "Invalid IP address provided: %s", ipAddress.c_str());
+        return;
+    }
+    
+    // Send IP command prefix followed by IP address
+    String ipCommand = "I" + ipAddress + "\n";
+    
+    ESP_LOGI(TAG, "Sending IP address to Arduino Nano: %s", ipAddress.c_str());
+    uart_write_bytes(CURRENT_SENSOR_PORT, ipCommand.c_str(), ipCommand.length());
+    
+    // Small delay to ensure transmission
+    vTaskDelay(pdMS_TO_TICKS(100));
+}
+
+void UARTCurrentSensor::sendWiFiMode(bool isAPMode, const String& ipAddress) {
+    const char* TAG = "UARTCurrentSensor::sendWiFiMode";
+    
+    // Send WiFi mode command: M[A/S][IP_ADDRESS]\n
+    // A = AP Mode (Field), S = Station Mode (Home/Office)
+    String modeCommand = "M";
+    modeCommand += isAPMode ? "A" : "S";
+    modeCommand += ipAddress + "\n";
+    
+    ESP_LOGI(TAG, "Sending WiFi mode to Arduino Nano: %s, IP: %s", 
+             isAPMode ? "AP Mode (Field)" : "Station Mode (Home/Office)", 
+             ipAddress.c_str());
+    
+    uart_write_bytes(CURRENT_SENSOR_PORT, modeCommand.c_str(), modeCommand.length());
+    
+    // Small delay to ensure transmission
+    vTaskDelay(pdMS_TO_TICKS(100));
 }
 
 void UARTCurrentSensor::uartCurrentSensorTask(void *pvParameters) {

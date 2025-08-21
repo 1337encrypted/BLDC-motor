@@ -39,10 +39,11 @@ void setup() {
     buzz.initBuzzer();
     
     // Display startup message
-    OLEDFunctions::clearBuffer();
-    OLEDFunctions::oled.drawStr(15, 32, "Motor Control");
-    OLEDFunctions::oled.drawStr(10, 45, "Current Monitor");
-    OLEDFunctions::sendBuffer();
+    OLEDFunctions::oled.firstPage();
+    do {
+        OLEDFunctions::oled.drawStr(25, 32, "BLDC");
+        OLEDFunctions::oled.drawStr(15, 45, "Monitor");
+    } while (OLEDFunctions::oled.nextPage());
     delay(2000);
 }
 
@@ -67,14 +68,7 @@ void loop() {
     }
     
     // Handle serial communication from ESP32
-    while (Serial.available() > 0) {
-        char receivedChar = Serial.read();
-        
-        if (receivedChar == 'S') { // ESP32 requests data
-            sendData();
-        }
-        break;
-    }
+    handleUARTCommands();
     
     delay(50); // 20Hz update rate
 }
@@ -90,10 +84,36 @@ void updateOLEDDisplay(float power1, float power2) {
     dtostrf(power1, 4, 1, power1Str);
     dtostrf(power2, 4, 1, power2Str);
     
-    // Update OLED display
-    OLEDFunctions::clearBuffer();
-    OLEDFunctions::displayCurrent(current1Str, current2Str);
-    OLEDFunctions::displayVoltage(voltage1Str);
-    OLEDFunctions::displayPower(power1Str, power2Str);
-    OLEDFunctions::sendBuffer();
+    // Update OLED display using page buffer mode
+    OLEDFunctions::oled.firstPage();
+    do {
+        // Always show current and voltage
+        OLEDFunctions::displayCurrent(current1Str, current2Str);
+        OLEDFunctions::displayVoltage(voltage1Str);
+        
+        // Bottom section based on display mode
+        switch (displayMode) {
+            case 2: // WiFi Mode + IP (priority display)
+                if (wifiModeReceived) {
+                    OLEDFunctions::displayWiFiMode(wifiMode, wifiModeIP);
+                } else if (ipAddressReceived) {
+                    OLEDFunctions::displayIPAddress(receivedIPAddress);
+                } else {
+                    OLEDFunctions::displayPower(power1Str, power2Str);
+                }
+                break;
+                
+            case 1: // IP Only
+                if (ipAddressReceived) {
+                    OLEDFunctions::displayIPAddress(receivedIPAddress);
+                } else {
+                    OLEDFunctions::displayPower(power1Str, power2Str);
+                }
+                break;
+                
+            default: // Normal mode (Power display)
+                OLEDFunctions::displayPower(power1Str, power2Str);
+                break;
+        }
+    } while (OLEDFunctions::oled.nextPage());
 }

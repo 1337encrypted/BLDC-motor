@@ -10,12 +10,24 @@ extern PwmGenerator motorPWM1;
 extern PwmGenerator motorPWM2;
 extern BLDCPulseCalculator motorPulse1;
 extern BLDCPulseCalculator motorPulse2;
-extern DoorLock doorLock;
 extern UARTCurrentSensor currentSensor;
+
+// New modular objects
+extern Light leftLight;
+extern Light rightLight;
+extern SingleDoorLock frontLeftDoor;
+extern SingleDoorLock frontRightDoor;
+extern SingleDoorLock rearLeftDoor;
+extern SingleDoorLock rearRightDoor;
 
 // Global state variables
 extern bool doorsLocked;
-extern bool lightsOn;
+extern bool door1Locked;
+extern bool door2Locked;
+extern bool door3Locked;
+extern bool door4Locked;
+extern bool leftLightOn;
+extern bool rightLightOn;
 extern uint8_t currentPWM;
 extern float motor1Speed;
 extern float motor2Speed;
@@ -58,7 +70,7 @@ public:
     float getSystemVoltage() const { return systemVoltage; }
     uint8_t getCurrentPWM() const { return currentPWM; }
     bool getDoorsLocked() const { return doorsLocked; }
-    bool getLightsOn() const { return lightsOn; }
+    bool getLightsOn() const { return leftLightOn || rightLightOn; }
     
     // Data update rate control
     void setUpdateRate(uint32_t rateMs);
@@ -138,12 +150,21 @@ void DataCollector::collectCurrentData() {
 }
 
 void DataCollector::collectSystemData() {
-    // Update control states
-    doorsLocked = doorLock.areAllDoorsLocked();
-    // lightsOn state managed by control interface
+    // Update individual door states
+    door1Locked = frontLeftDoor.isLockLocked();
+    door2Locked = frontRightDoor.isLockLocked();
+    door3Locked = rearLeftDoor.isLockLocked();
+    door4Locked = rearRightDoor.isLockLocked();
+    doorsLocked = door1Locked && door2Locked && door3Locked && door4Locked;
     
-    ESP_LOGD("DataCollector", "System state: Doors=%s, Lights=%s", 
-             doorsLocked ? "locked" : "unlocked", lightsOn ? "on" : "off");
+    // Update individual light states
+    leftLightOn = leftLight.isOn();
+    rightLightOn = rightLight.isOn();
+    
+    ESP_LOGD("DataCollector", "System state: Doors FL:%s FR:%s RL:%s RR:%s, Lights L:%s R:%s", 
+             door1Locked ? "L" : "U", door2Locked ? "L" : "U",
+             door3Locked ? "L" : "U", door4Locked ? "L" : "U",
+             leftLightOn ? "ON" : "OFF", rightLightOn ? "ON" : "OFF");
 }
 
 DynamicJsonDocument DataCollector::getMotorData() {
@@ -179,7 +200,7 @@ DynamicJsonDocument DataCollector::getSystemData() {
     doc["uptime"] = millis();
     doc["wifi_rssi"] = WiFi.RSSI();
     doc["doors_locked"] = doorsLocked;
-    doc["lights_on"] = lightsOn;
+    doc["lights_on"] = leftLightOn || rightLightOn;
     doc["current_sensor_valid"] = currentSensor.isDataValid();
     doc["timestamp"] = millis();
     
@@ -187,9 +208,9 @@ DynamicJsonDocument DataCollector::getSystemData() {
 }
 
 DynamicJsonDocument DataCollector::getAllData() {
-    DynamicJsonDocument doc(2048);
+    DynamicJsonDocument doc(3072); // Increased size for additional data
     
-    // Motor data
+    // Motor data (now includes 4 motors for UI compatibility)
     JsonObject motor1 = doc["motor1"].to<JsonObject>();
     motor1["speed"] = motor1Speed;
     motor1["current"] = motor1Current;
@@ -200,11 +221,36 @@ DynamicJsonDocument DataCollector::getAllData() {
     motor2["current"] = motor2Current;
     motor2["power"] = motor2Current * systemVoltage;
     
+    // Add motor3 and motor4 for UI compatibility (currently using same data)
+    JsonObject motor3 = doc["motor3"].to<JsonObject>();
+    motor3["speed"] = 0; // Not implemented yet
+    motor3["current"] = 0.0f;
+    motor3["power"] = 0.0f;
+    
+    JsonObject motor4 = doc["motor4"].to<JsonObject>();
+    motor4["speed"] = 0; // Not implemented yet
+    motor4["current"] = 0.0f;
+    motor4["power"] = 0.0f;
+    
     // Control data
     doc["pwm"] = currentPWM;
     doc["voltage"] = systemVoltage;
-    doc["doors_locked"] = doorsLocked;
-    doc["lights_on"] = lightsOn;
+    
+    // Individual door states (matching UI expectations)
+    JsonObject doors = doc["doors"].to<JsonObject>();
+    doors["left_locked"] = door1Locked;   // Front left door mapped to "left"
+    doors["right_locked"] = door2Locked; // Front right door mapped to "right"
+    doors["all_locked"] = doorsLocked;
+    doors["front_left"] = door1Locked;
+    doors["front_right"] = door2Locked;
+    doors["rear_left"] = door3Locked;
+    doors["rear_right"] = door4Locked;
+    
+    // Individual light states (matching UI expectations)
+    JsonObject lights = doc["lights"].to<JsonObject>();
+    lights["left_on"] = leftLightOn;
+    lights["right_on"] = rightLightOn;
+    lights["all_on"] = leftLightOn || rightLightOn; // Combined state
     
     // System data
     doc["heap"] = ESP.getFreeHeap();

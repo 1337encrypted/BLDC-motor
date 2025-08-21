@@ -10,6 +10,9 @@
 
 #pragma once
 
+// Forward declaration of class
+class buzzer;
+
 // Motor characteristics data structure (matches ESP32 receiver)
 typedef struct {
     float current1;    // Motor 1 current in Amps
@@ -17,32 +20,115 @@ typedef struct {
     float voltage1;    // System voltage in Volts
 } MotorCharacteristicsData;
 
-// Function to send sensor data to ESP32
-void sendData() {
-    // Serialize the struct data into a buffer
-    uint8_t buffer[sizeof(MotorCharacteristicsData)];
-    memcpy(buffer, &data, sizeof(data));
+// Forward declarations from GLOBALS.hpp
+extern MotorCharacteristicsData data;
+extern buzzer buzz;
 
-    // Send the serialized data over UART
-    Serial.write(buffer, sizeof(buffer));
+// Functions declarations only - implementations in separate functions
+void sendData();
+void motorCharacteristicsprintData();
+
+// Global variables for WiFi information
+char receivedIPAddress[16] = "No IP Set";
+bool ipAddressReceived = false;
+
+// WiFi mode information
+char wifiMode = 'U';  // U=Unknown, A=AP Mode (Field), S=Station Mode (Home/Office)
+bool wifiModeReceived = false;
+char wifiModeIP[16] = "";
+
+// Display mode: 0=Normal (Power), 1=IP Only, 2=WiFi Mode + IP
+uint8_t displayMode = 0;
+
+// Function to handle IP address reception (memory optimized)
+void handleIPAddressReception() {
+    static char ipBuffer[16];
+    static uint8_t bufferIndex = 0;
+    
+    while (Serial.available() > 0) {
+        char inChar = Serial.read();
+        
+        if (inChar == '\n' || inChar == '\r') {
+            // End of IP address string
+            if (bufferIndex > 0) {
+                ipBuffer[bufferIndex] = '\0'; // Null terminate
+                strcpy(receivedIPAddress, ipBuffer);
+                ipAddressReceived = true;
+                
+                // Log received IP address (if debugging enabled)
+                Serial.print(F("IP: "));
+                Serial.println(receivedIPAddress);
+                
+                // Reset buffer for next reception
+                bufferIndex = 0;
+                return;
+            }
+        } else if (bufferIndex < 15) { // Prevent buffer overflow
+            ipBuffer[bufferIndex++] = inChar;
+        }
+    }
 }
 
-// Debug function to print data to serial monitor
-void motorCharacteristicsprintData() {
-    Serial.print("I1:");
-    Serial.print(data.current1, 2);
-    Serial.print("A I2:");
-    Serial.print(data.current2, 2); 
-    Serial.print("A V:");
-    Serial.print(data.voltage1, 1);
-    Serial.println("V");
+// Function to handle WiFi mode reception
+void handleWiFiModeReception() {
+    static char modeBuffer[20];
+    static uint8_t bufferIndex = 0;
+    
+    while (Serial.available() > 0) {
+        char inChar = Serial.read();
+        
+        if (inChar == '\n' || inChar == '\r') {
+            // End of mode command string
+            if (bufferIndex > 0) {
+                modeBuffer[bufferIndex] = '\0'; // Null terminate
+                
+                // Parse mode command: First char is mode (A/S), rest is IP
+                if (bufferIndex > 1) {
+                    wifiMode = modeBuffer[0]; // A or S
+                    strcpy(wifiModeIP, &modeBuffer[1]); // IP address
+                    wifiModeReceived = true;
+                    
+                    // Set display mode based on received info
+                    displayMode = 2; // WiFi Mode + IP display
+                    
+                    Serial.print(F("WiFi Mode: "));
+                    Serial.print(wifiMode == 'A' ? F("Field (AP)") : F("Home/Office (STA)"));
+                    Serial.print(F(", IP: "));
+                    Serial.println(wifiModeIP);
+                }
+                
+                // Reset buffer for next reception
+                bufferIndex = 0;
+                return;
+            }
+        } else if (bufferIndex < 19) { // Prevent buffer overflow
+            modeBuffer[bufferIndex++] = inChar;
+        }
+    }
 }
 
 // Function to handle incoming UART commands
 void handleUARTCommands() {
-    while (Serial.available() > 0) {
-        char receivedChar = Serial.read();
+    if (Serial.available() > 0) {
+        char receivedChar = Serial.peek(); // Look at first character without consuming it
         
+        if (receivedChar == 'I') {
+            // IP address command - consume the 'I' and handle IP reception
+            Serial.read(); // Consume the 'I'
+            handleIPAddressReception();
+            displayMode = 1; // IP only display
+            return;
+        }
+        
+        if (receivedChar == 'M') {
+            // WiFi Mode command - consume the 'M' and handle mode reception
+            Serial.read(); // Consume the 'M'
+            handleWiFiModeReception();
+            return;
+        }
+        
+        // Handle single character commands
+        receivedChar = Serial.read();
         switch (receivedChar) {
             case 'S':  // Send data command from ESP32
                 sendData();
@@ -60,7 +146,5 @@ void handleUARTCommands() {
                 // Ignore unknown commands
                 break;
         }
-        
-        break; // Process one command per loop iteration
     }
 }
