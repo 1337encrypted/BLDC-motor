@@ -4,9 +4,7 @@
 #include <SPI.h>
 
 namespace OLEDFunctions {
-    // extern U8G2_SSD1306_128X64_NONAME_F_HW_I2C oled;
-     extern U8G2_SH1106_128X64_NONAME_1_HW_I2C oled;
-    
+    extern U8G2_SH1106_128X64_NONAME_1_HW_I2C oled;
 
     void begin();
     void displayCurrent(const char*, const char*);
@@ -14,8 +12,10 @@ namespace OLEDFunctions {
     void displayPower(const char*, const char*);
     void displayIPAddress(const char*);
     void displayWiFiMode(char mode, const char* ipAddress);
-    void printOLED();
-
+    void displayEnhanced(const char* current1, const char* current2, const char* voltage, 
+                        const char* power1, const char* power2, const char* ipAddress, 
+                        char wifiMode, int wifiStrength);
+    
     void clearBuffer();
     void sendBuffer();
 
@@ -29,7 +29,7 @@ void OLEDFunctions::begin(){
     oled.setColorIndex(1);
     oled.begin();
     oled.setBitmapMode(1);
-    oled.setFont(u8g2_font_Pixellari_tf);
+    oled.setFont(u8g2_font_7x14_tf); // Bigger font for better readability
     clearBuffer();
 }
 
@@ -44,49 +44,68 @@ void OLEDFunctions::sendBuffer(){
 }
 
 void OLEDFunctions::displayCurrent(const char* current1, const char* current2) {
-  oled.drawStr(5, 12, "I1: ");
-  oled.drawStr(74, 12, current1);
+  oled.drawStr(2, 20, "I1:");
+  oled.drawStr(25, 20, current1);
+  oled.drawStr(60, 20, "A");
 
-  oled.drawStr(5, 25, "I2: ");
-  oled.drawStr(74, 25, current2);
+  oled.drawStr(2, 35, "I2:");
+  oled.drawStr(25, 35, current2);
+  oled.drawStr(60, 35, "A");
 }
 
 void OLEDFunctions::displayVoltage(const char* voltage1) {
-  oled.drawStr(5, 38, "V: ");
-  oled.drawStr(74, 38, voltage1);
+  oled.drawStr(2, 50, "V:");
+  oled.drawStr(25, 50, voltage1);
+  oled.drawStr(60, 50, "V");
 }
 
 void OLEDFunctions::displayPower(const char* power1, const char* power2) {
-    oled.drawStr(7, 51, "P1: ");
-    oled.drawStr(74, 51, power1);
+    oled.drawStr(2, 44, "P1:");
+    oled.drawStr(18, 44, power1);
+    oled.drawStr(45, 44, "W");
 
-    oled.drawStr(7, 64, "P2: ");
-    oled.drawStr(74, 64, power2);
+    oled.drawStr(65, 44, "P2:");
+    oled.drawStr(81, 44, power2);
+    oled.drawStr(108, 44, "W");
 }
 
 void OLEDFunctions::displayIPAddress(const char* ipAddress) {
-    // Display IP address at the bottom of the screen (memory optimized)
-    // First line: "ESP32 IP:"
-    oled.drawStr(5, 51, "ESP32:");
-    
-    // Second line: actual IP address (max 15 chars)
-    oled.drawStr(5, 64, ipAddress);
+    // Display IP address at the bottom of the screen with bigger font
+    oled.setFont(u8g2_font_6x10_tf); // Medium font for IP
+    oled.drawStr(2, 62, ipAddress);
+    oled.setFont(u8g2_font_7x14_tf); // Reset to main font
 }
 
 void OLEDFunctions::displayWiFiMode(char mode, const char* ipAddress) {
     // Display WiFi mode and IP address at the bottom
+    oled.setFont(u8g2_font_4x6_tf); // Smaller font for mode info
+    
     // First line: Mode indicator
     if (mode == 'A') {
-        oled.drawStr(5, 51, "Field:"); // AP Mode (Field operation)
+        oled.drawStr(2, 58, "FIELD MODE (AP)"); // AP Mode (Field operation)
     } else if (mode == 'S') {
-        oled.drawStr(5, 51, "Home:"); // Station Mode (Home/Office)
+        oled.drawStr(2, 58, "HOME MODE (STA)"); // Station Mode (Home/Office)
     } else {
-        oled.drawStr(5, 51, "WiFi:"); // Unknown mode
+        oled.drawStr(2, 58, "WIFI MODE");
     }
     
     // Second line: IP address
-    oled.drawStr(5, 64, ipAddress);
+    oled.drawStr(2, 64, ipAddress);
+    oled.setFont(u8g2_font_6x10_tf); // Reset to main font
 }
 
-
-
+void OLEDFunctions::displayEnhanced(const char* current1, const char* current2, const char* voltage, 
+                                   const char* power1, const char* power2, const char* ipAddress, 
+                                   char wifiMode, int wifiStrength) {
+    // Simplified display with bigger fonts - current, voltage, and IP only
+    oled.setFont(u8g2_font_7x14_tf); // Bigger font for main data
+    
+    // Main content area - current and voltage with larger spacing
+    displayCurrent(current1, current2);
+    displayVoltage(voltage);
+    
+    // Bottom section - IP address (always show if available)
+    if (ipAddress && strlen(ipAddress) > 0 && strcmp(ipAddress, "No IP Set") != 0) {
+        displayIPAddress(ipAddress);
+    }
+}

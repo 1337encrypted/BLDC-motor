@@ -8,109 +8,138 @@
 #include "driver/gpio.h"
 #include "sdkconfig.h"
 #include "esp_log.h"
+#include <numeric>
+#include <vector>
 
-// UART Configuration for Current Sensor Communication  
-// Using pins from GLOBALS.hpp to avoid conflicts
-constexpr uint8_t CURRENT_SENSOR_TXD = 17;  // UART_TX_PIN from GLOBALS.hpp
-constexpr uint8_t CURRENT_SENSOR_RXD = 16;  // UART_RX_PIN from GLOBALS.hpp
-constexpr uint8_t CURRENT_SENSOR_RTS = (UART_PIN_NO_CHANGE);
-constexpr uint8_t CURRENT_SENSOR_CTS = (UART_PIN_NO_CHANGE);
-
+// UART Configuration for Current Sensor Communication
+constexpr uint8_t CURRENT_SENSOR_TXD = 4;   // Updated to match GLOBALS.hpp
+constexpr uint8_t CURRENT_SENSOR_RXD = 5;   // Updated to match GLOBALS.hpp
 constexpr int CURRENT_SENSOR_BAUD_RATE = 115200;
 constexpr uart_port_t CURRENT_SENSOR_PORT = UART_NUM_2;
-constexpr int CURRENT_SENSOR_STACK_SIZE = 2048;
+constexpr int CURRENT_SENSOR_STACK_SIZE = 4096; // Increased stack size for more complex logic
+
+// --- New Robust Communication Protocol ---
+constexpr uint8_t SOF_BYTE = 0xAA; // Start of Frame
+constexpr uint8_t EOF_BYTE = 0x55; // End of Frame
+
+// Data structure for communication (must match Arduino Nano)
+#pragma pack(push, 1)
+typedef struct MotorCharacteristicsData {
+    float current1;
+    float current2;
+    float voltage1;
+} MotorCharacteristicsData;
+#pragma pack(pop)
+
+// Full packet structure including SOF, EOF, and checksum
+#pragma pack(push, 1)
+struct UARTPacket {
+    uint8_t sof;
+    MotorCharacteristicsData data;
+    uint8_t checksum;
+    uint8_t eof;
+};
+#pragma pack(pop)
+// --- End of Protocol Definition ---
+
+// --- Data Smoothing ---
+template<typename T, size_t N>
+class MovingAverage {
+private:
+    T buffer[N];
+    size_t index = 0;
+    T sum = 0;
+    bool full = false;
+
+public:
+    MovingAverage() {
+        for(size_t i = 0; i < N; ++i) buffer[i] = 0;
+    }
+
+    void add(T value) {
+        sum -= buffer[index];
+        buffer[index] = value;
+        sum += value;
+        index = (index + 1) % N;
+        if (index == 0) full = true;
+    }
+
+    T get() const {
+        return sum / (full ? N : (index == 0 ? 1 : index));
+    }
+};
+// --- End of Data Smoothing ---
 
 class UARTCurrentSensor {
 private:
     const int uart_buffer_size;
     QueueHandle_t uart_queue;
     const char* request_command;
-    
-    // Current sensor data structure (matches Arduino Nano)
-    typedef struct MotorCharacteristicsData {
-        float current1;    // Motor 1 current in Amps
-        float current2;    // Motor 2 current in Amps
-        float voltage1;    // System voltage in Volts
-    } MotorCharacteristicsData;
 
     MotorCharacteristicsData sensor_data;
     bool data_valid;
     unsigned long last_update_time;
-    
+
+    // Data smoothing filters
+    MovingAverage<float, 5> current1_filter;
+    MovingAverage<float, 5> current2_filter;
+    MovingAverage<float, 5> voltage_filter;
+
+    uint8_t calculateChecksum(const MotorCharacteristicsData& data) {
+        const uint8_t* bytes = reinterpret_cast<const uint8_t*>(&data);
+        uint8_t checksum = 0;
+        for (size_t i = 0; i < sizeof(data); ++i) {
+            checksum ^= bytes[i];
+        }
+        return checksum;
+    }
+
 public:
-    UARTCurrentSensor(int buffer_size = 1024, const char* cmd = "S");
+    UARTCurrentSensor(int buffer_size = 2048, const char* cmd = "S");
     void begin(TaskHandle_t &taskHandle, const BaseType_t app_cpu = 1);
     void requestData();
-    void receiveData();
-    
-    // Getter functions for sensor data
-    float getCurrent1() const { return data_valid ? sensor_data.current1 : 0.0f; }
-    float getCurrent2() const { return data_valid ? sensor_data.current2 : 0.0f; }
-    float getVoltage() const { return data_valid ? sensor_data.voltage1 : 0.0f; }
+    bool receiveData(); // Changed to return bool for success
+
+    // Getters now return smoothed data
+    float getCurrent1() const { return data_valid ? current1_filter.get() : 0.0f; }
+    float getCurrent2() const { return data_valid ? current2_filter.get() : 0.0f; }
+    float getVoltage() const { return data_valid ? voltage_filter.get() : 0.0f; }
     bool isDataValid() const { return data_valid; }
     unsigned long getLastUpdateTime() const { return last_update_time; }
-    
-    // Debug functions
-    void printSensorData();
-    void sendDebugCommand();
-    void sendResetCommand();
-    
-    // IP address transmission
+
     void sendIPAddress(const String& ipAddress);
-    
-    // WiFi mode transmission
     void sendWiFiMode(bool isAPMode, const String& ipAddress);
-    
-    // FreeRTOS task
+    void sendWiFiStrength(int rssi);
+
     static void uartCurrentSensorTask(void *pvParameters);
 };
 
-UARTCurrentSensor::UARTCurrentSensor(int buffer_size, const char* cmd) : 
+UARTCurrentSensor::UARTCurrentSensor(int buffer_size, const char* cmd) :
 uart_buffer_size(buffer_size),
 request_command(cmd),
 sensor_data{0.0f, 0.0f, 0.0f},
 data_valid(false),
 last_update_time(0) {
-
-    // Configure UART
     uart_config_t uart_config = {
         .baud_rate = CURRENT_SENSOR_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
         .parity    = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .rx_flow_ctrl_thresh = 122,
         .source_clk = UART_SCLK_DEFAULT
     };
-
     ESP_ERROR_CHECK(uart_param_config(CURRENT_SENSOR_PORT, &uart_config));
-    ESP_ERROR_CHECK(uart_set_pin(CURRENT_SENSOR_PORT, CURRENT_SENSOR_TXD, CURRENT_SENSOR_RXD, 
-                                 UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
-    ESP_ERROR_CHECK(uart_driver_install(CURRENT_SENSOR_PORT, uart_buffer_size, uart_buffer_size, 
-                                       10, &uart_queue, 0));
+    ESP_ERROR_CHECK(uart_set_pin(CURRENT_SENSOR_PORT, CURRENT_SENSOR_TXD, CURRENT_SENSOR_RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    ESP_ERROR_CHECK(uart_driver_install(CURRENT_SENSOR_PORT, uart_buffer_size, uart_buffer_size, 10, &uart_queue, 0));
 }
 
 void UARTCurrentSensor::begin(TaskHandle_t &taskHandle, const BaseType_t app_cpu) {
     const char* TAG = "UARTCurrentSensor::begin";
-
     if(taskHandle == nullptr) {
-        BaseType_t result = xTaskCreatePinnedToCore(
-            &uartCurrentSensorTask,
-            "uart_current_sensor_task",
-            CURRENT_SENSOR_STACK_SIZE,
-            this,
-            2,
-            &taskHandle,
-            app_cpu
-        );
-        
-        if (result == pdPASS) {
-            ESP_LOGI(TAG, "Created the uart_current_sensor_task successfully");
-        } else {
+        BaseType_t result = xTaskCreatePinnedToCore(&uartCurrentSensorTask, "uart_current_sensor_task", CURRENT_SENSOR_STACK_SIZE, this, 2, &taskHandle, app_cpu);
+        if (result != pdPASS) {
             ESP_LOGE(TAG, "Failed to create the uart_current_sensor_task");
         }
-    } else {
-        ESP_LOGI(TAG, "uart_current_sensor_task already created");
     }
 }
 
@@ -118,99 +147,129 @@ void UARTCurrentSensor::requestData() {
     uart_write_bytes(CURRENT_SENSOR_PORT, request_command, strlen(request_command));
 }
 
-void UARTCurrentSensor::receiveData() {
+bool UARTCurrentSensor::receiveData() {
     const char* TAG = "UARTCurrentSensor::receiveData";
+    uint8_t buffer[sizeof(UARTPacket)];
+    int bytes_read = 0;
     
-    // Buffer to store received data
-    uint8_t data_buffer[sizeof(MotorCharacteristicsData)];
-    
-    // Read data from UART buffer with timeout
-    size_t data_length = uart_read_bytes(CURRENT_SENSOR_PORT, data_buffer, 
-                                        sizeof(data_buffer), 200 / portTICK_PERIOD_MS);
-    
-    if (data_length == sizeof(MotorCharacteristicsData)) {
-        // Deserialize received bytes into struct
-        memcpy(&sensor_data, data_buffer, sizeof(MotorCharacteristicsData));
-        data_valid = true;
-        last_update_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
-        
-        ESP_LOGD(TAG, "Received valid sensor data: I1=%.2fA, I2=%.2fA, V=%.1fV", 
-                sensor_data.current1, sensor_data.current2, sensor_data.voltage1);
-    } else if (data_length > 0) {
-        ESP_LOGW(TAG, "Received incorrect data size: %d bytes (expected %d)", 
-                data_length, sizeof(MotorCharacteristicsData));
-        // Flush remaining data
-        uart_flush(CURRENT_SENSOR_PORT);
-    }
-    
-    // Mark data as invalid if no updates for more than 5 seconds
-    if (data_valid && (xTaskGetTickCount() * portTICK_PERIOD_MS - last_update_time) > 5000) {
-        data_valid = false;
-        ESP_LOGW(TAG, "Current sensor data timeout - marking as invalid");
-    }
-}
+    // 1. Find Start of Frame (SOF)
+    uint8_t sof_finder;
+    do {
+        bytes_read = uart_read_bytes(CURRENT_SENSOR_PORT, &sof_finder, 1, pdMS_TO_TICKS(100));
+        if (bytes_read == 0) {
+            ESP_LOGD(TAG, "Timeout waiting for SOF byte - checking Arduino connection");
+            return false;
+        }
+    } while (sof_finder != SOF_BYTE);
 
-void UARTCurrentSensor::printSensorData() {
-    if (data_valid) {
-        ESP_LOGI("CurrentSensor", "Motor1: %.2fA, Motor2: %.2fA, Voltage: %.1fV", 
-                sensor_data.current1, sensor_data.current2, sensor_data.voltage1);
-    } else {
-        ESP_LOGW("CurrentSensor", "No valid sensor data available");
+    // 2. Read the rest of the packet
+    buffer[0] = SOF_BYTE;
+    int remaining_bytes = sizeof(UARTPacket) - 1;
+    bytes_read = uart_read_bytes(CURRENT_SENSOR_PORT, &buffer[1], remaining_bytes, pdMS_TO_TICKS(100));
+
+    if (bytes_read != remaining_bytes) {
+        ESP_LOGW(TAG, "Incomplete packet received. Expected %d, got %d.", remaining_bytes, bytes_read);
+        uart_flush_input(CURRENT_SENSOR_PORT);
+        return false;
     }
-}
 
-void UARTCurrentSensor::sendDebugCommand() {
-    uart_write_bytes(CURRENT_SENSOR_PORT, "D", 1);
-}
+    UARTPacket* packet = reinterpret_cast<UARTPacket*>(buffer);
 
-void UARTCurrentSensor::sendResetCommand() {
-    uart_write_bytes(CURRENT_SENSOR_PORT, "R", 1);
+    // 3. Verify EOF and Checksum
+    if (packet->eof != EOF_BYTE) {
+        ESP_LOGW(TAG, "Invalid EOF byte. Expected 0x%X, got 0x%X.", EOF_BYTE, packet->eof);
+        return false;
+    }
+
+    uint8_t calculated_checksum = calculateChecksum(packet->data);
+    if (packet->checksum != calculated_checksum) {
+        ESP_LOGW(TAG, "Checksum mismatch. Expected %u, got %u.", calculated_checksum, packet->checksum);
+        return false;
+    }
+
+    // 4. Data is valid, update sensor data and filters
+    sensor_data = packet->data;
+    current1_filter.add(sensor_data.current1);
+    current2_filter.add(sensor_data.current2);
+    voltage_filter.add(sensor_data.voltage1);
+    
+    data_valid = true;
+    last_update_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
+    ESP_LOGD(TAG, "Valid packet received: I1=%.2fA, I2=%.2fA, V=%.1fV", sensor_data.current1, sensor_data.current2, sensor_data.voltage1);
+    
+    return true;
 }
 
 void UARTCurrentSensor::sendIPAddress(const String& ipAddress) {
     const char* TAG = "UARTCurrentSensor::sendIPAddress";
-    
     if (ipAddress.length() == 0 || ipAddress == "0.0.0.0") {
         ESP_LOGW(TAG, "Invalid IP address provided: %s", ipAddress.c_str());
         return;
     }
-    
-    // Send IP command prefix followed by IP address
     String ipCommand = "I" + ipAddress + "\n";
-    
-    ESP_LOGI(TAG, "Sending IP address to Arduino Nano: %s", ipAddress.c_str());
     uart_write_bytes(CURRENT_SENSOR_PORT, ipCommand.c_str(), ipCommand.length());
-    
-    // Small delay to ensure transmission
     vTaskDelay(pdMS_TO_TICKS(100));
 }
 
 void UARTCurrentSensor::sendWiFiMode(bool isAPMode, const String& ipAddress) {
     const char* TAG = "UARTCurrentSensor::sendWiFiMode";
-    
-    // Send WiFi mode command: M[A/S][IP_ADDRESS]\n
-    // A = AP Mode (Field), S = Station Mode (Home/Office)
     String modeCommand = "M";
     modeCommand += isAPMode ? "A" : "S";
     modeCommand += ipAddress + "\n";
-    
-    ESP_LOGI(TAG, "Sending WiFi mode to Arduino Nano: %s, IP: %s", 
-             isAPMode ? "AP Mode (Field)" : "Station Mode (Home/Office)", 
-             ipAddress.c_str());
-    
     uart_write_bytes(CURRENT_SENSOR_PORT, modeCommand.c_str(), modeCommand.length());
-    
-    // Small delay to ensure transmission
     vTaskDelay(pdMS_TO_TICKS(100));
+}
+
+void UARTCurrentSensor::sendWiFiStrength(int rssi) {
+    const char* TAG = "UARTCurrentSensor::sendWiFiStrength";
+    
+    // Convert RSSI to 0-4 scale
+    int strength = 0;
+    if (rssi >= -50) strength = 4;      // Excellent
+    else if (rssi >= -60) strength = 3; // Good  
+    else if (rssi >= -70) strength = 2; // Fair
+    else if (rssi >= -80) strength = 1; // Poor
+    else strength = 0;                  // Very poor/disconnected
+    
+    String strengthCommand = "W" + String(strength) + "\n";
+    uart_write_bytes(CURRENT_SENSOR_PORT, strengthCommand.c_str(), strengthCommand.length());
+    vTaskDelay(pdMS_TO_TICKS(50));
+    
+    ESP_LOGD(TAG, "Sent WiFi strength: RSSI=%d, Strength=%d", rssi, strength);
 }
 
 void UARTCurrentSensor::uartCurrentSensorTask(void *pvParameters) {
     UARTCurrentSensor *sensor = static_cast<UARTCurrentSensor*>(pvParameters);
+    const char* TAG = "UARTCurrentSensorTask";
+    
+    ESP_LOGI(TAG, "UART Current Sensor task started on UART port %d (GPIO %d/%d)", 
+             CURRENT_SENSOR_PORT, CURRENT_SENSOR_TXD, CURRENT_SENSOR_RXD);
+    
+    uint32_t failedAttempts = 0;
     
     while (1) {
+        ESP_LOGD(TAG, "Requesting data from Arduino Nano...");
         sensor->requestData();
-        vTaskDelay(50 / portTICK_PERIOD_MS);  // Wait for Arduino to process
-        sensor->receiveData();
-        vTaskDelay(100 / portTICK_PERIOD_MS); // 10Hz update rate
+        vTaskDelay(pdMS_TO_TICKS(20)); // Short delay for the command to be sent
+
+        if (!sensor->receiveData()) {
+            failedAttempts++;
+            if (failedAttempts % 10 == 0) { // Log every 10th failure
+                ESP_LOGW(TAG, "Failed to receive data from Arduino (attempts: %u)", failedAttempts);
+            }
+            
+            // If data is not received, maybe the sensor is offline
+            if (sensor->data_valid && (xTaskGetTickCount() * portTICK_PERIOD_MS - sensor->last_update_time) > 2000) {
+                ESP_LOGW(TAG, "Sensor data timeout. Marking as invalid.");
+                sensor->data_valid = false;
+            }
+        } else {
+            if (failedAttempts > 0) {
+                ESP_LOGI(TAG, "Arduino communication restored after %u failed attempts", failedAttempts);
+                failedAttempts = 0;
+            }
+        }
+        
+        vTaskDelay(pdMS_TO_TICKS(150)); // Adjust loop rate
     }
 }

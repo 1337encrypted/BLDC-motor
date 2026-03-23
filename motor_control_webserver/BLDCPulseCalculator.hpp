@@ -65,6 +65,8 @@ void BLDCPulseCalculator::begin(TaskHandle_t &taskHandle, const BaseType_t app_c
     .pull_down_en = GPIO_PULLDOWN_ENABLE,
     .intr_type = GPIO_INTR_ANYEDGE
   };
+  
+  ESP_LOGI(TAG, "Configuring Motor %d feedback pin GPIO_%d with pulldown", motorId, feedBackPin);
   ESP_ERROR_CHECK(gpio_config(&gpioOutputConfigure));
 
   gpio_install_isr_service(0);

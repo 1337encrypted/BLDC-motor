@@ -45,6 +45,16 @@ void setup() {
         OLEDFunctions::oled.drawStr(15, 45, "Monitor");
     } while (OLEDFunctions::oled.nextPage());
     delay(2000);
+    
+    // Test OLED with sample data
+    Serial.println(F("Testing OLED with sample data..."));
+    OLEDFunctions::oled.firstPage();
+    do {
+        OLEDFunctions::displayEnhanced("1.25", "2.34", "12.0", "15.0", "28.1", "192.168.1.100", 'S', 3);
+    } while (OLEDFunctions::oled.nextPage());
+    delay(3000);
+    
+    Serial.println(F("Starting current sensor monitoring..."));
 }
 
 void loop() {
@@ -57,12 +67,30 @@ void loop() {
     float power1 = data.current1 * data.voltage1;
     float power2 = data.current2 * data.voltage1;
     
+    // Debug output every 1 second (20 cycles at 20Hz)
+    static uint8_t debugCounter = 0;
+    if (++debugCounter >= 20) {
+        debugCounter = 0;
+        Serial.print(F("DEBUG - I1: "));
+        Serial.print(data.current1, 3);
+        Serial.print(F("A, I2: "));
+        Serial.print(data.current2, 3);
+        Serial.print(F("A, V1: "));
+        Serial.print(data.voltage1, 2);
+        Serial.print(F("V, P1: "));
+        Serial.print(power1, 2);
+        Serial.print(F("W, P2: "));
+        Serial.print(power2, 2);
+        Serial.println(F("W"));
+    }
+    
     // Update OLED display
     updateOLEDDisplay(power1, power2);
     
     // Check for overcurrent condition (8A threshold)
     if (data.current1 > 8.0 || data.current2 > 8.0) {
         buzz.on();
+        Serial.println(F("OVERCURRENT DETECTED!"));
     } else {
         buzz.off();
     }
@@ -74,46 +102,61 @@ void loop() {
 }
 
 void updateOLEDDisplay(float power1, float power2) {
-    // Convert float values to strings for display
+    // Convert float values to strings for display with proper formatting
     char current1Str[8], current2Str[8], voltage1Str[8];
     char power1Str[8], power2Str[8];
     
-    dtostrf(data.current1, 4, 2, current1Str);
-    dtostrf(data.current2, 4, 2, current2Str);  
-    dtostrf(data.voltage1, 4, 1, voltage1Str);
-    dtostrf(power1, 4, 1, power1Str);
-    dtostrf(power2, 4, 1, power2Str);
+    // Ensure proper string formatting with consistent width
+    dtostrf(data.current1, 5, 2, current1Str);  // Format: " X.XX"
+    dtostrf(data.current2, 5, 2, current2Str);  // Format: " X.XX"
+    dtostrf(data.voltage1, 5, 1, voltage1Str);  // Format: " XX.X"
+    dtostrf(power1, 5, 1, power1Str);           // Format: " XX.X"
+    dtostrf(power2, 5, 1, power2Str);           // Format: " XX.X"
     
-    // Update OLED display using page buffer mode
+    // Remove leading spaces for cleaner display
+    String temp1 = String(current1Str);
+    temp1.trim();
+    temp1.toCharArray(current1Str, 8);
+    
+    String temp2 = String(current2Str);
+    temp2.trim();
+    temp2.toCharArray(current2Str, 8);
+    
+    String temp3 = String(voltage1Str);
+    temp3.trim();
+    temp3.toCharArray(voltage1Str, 8);
+    
+    String temp4 = String(power1Str);
+    temp4.trim();
+    temp4.toCharArray(power1Str, 8);
+    
+    String temp5 = String(power2Str);
+    temp5.trim();
+    temp5.toCharArray(power2Str, 8);
+    
+    // Get WiFi strength and mode info
+    int displayWiFiStrength = wifiStrengthReceived ? wifiStrength : 0;
+    char displayMode = wifiModeReceived ? wifiMode : 'U'; // U for unknown
+    char* displayIP = wifiModeReceived ? wifiModeIP : (ipAddressReceived ? receivedIPAddress : "");
+    
+    // Debug output for display strings
+    static uint8_t displayDebugCounter = 0;
+    if (++displayDebugCounter >= 40) { // Every 2 seconds
+        displayDebugCounter = 0;
+        Serial.print(F("DISPLAY - Current1: '"));
+        Serial.print(current1Str);
+        Serial.print(F("', Current2: '"));
+        Serial.print(current2Str);
+        Serial.print(F("', Voltage: '"));
+        Serial.print(voltage1Str);
+        Serial.println(F("'"));
+    }
+    
+    // Update OLED display using enhanced layout
     OLEDFunctions::oled.firstPage();
     do {
-        // Always show current and voltage
-        OLEDFunctions::displayCurrent(current1Str, current2Str);
-        OLEDFunctions::displayVoltage(voltage1Str);
-        
-        // Bottom section based on display mode
-        switch (displayMode) {
-            case 2: // WiFi Mode + IP (priority display)
-                if (wifiModeReceived) {
-                    OLEDFunctions::displayWiFiMode(wifiMode, wifiModeIP);
-                } else if (ipAddressReceived) {
-                    OLEDFunctions::displayIPAddress(receivedIPAddress);
-                } else {
-                    OLEDFunctions::displayPower(power1Str, power2Str);
-                }
-                break;
-                
-            case 1: // IP Only
-                if (ipAddressReceived) {
-                    OLEDFunctions::displayIPAddress(receivedIPAddress);
-                } else {
-                    OLEDFunctions::displayPower(power1Str, power2Str);
-                }
-                break;
-                
-            default: // Normal mode (Power display)
-                OLEDFunctions::displayPower(power1Str, power2Str);
-                break;
-        }
+        OLEDFunctions::displayEnhanced(current1Str, current2Str, voltage1Str, 
+                                      power1Str, power2Str, displayIP, 
+                                      displayMode, displayWiFiStrength);
     } while (OLEDFunctions::oled.nextPage());
 }

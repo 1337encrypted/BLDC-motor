@@ -51,21 +51,30 @@ void ACS712::begin(){
 }
 
 double ACS712::readCurrent(){
-  // vout is read 1000 Times for precision
-  for(int i = 0; i < 1000; i++) 
+  // Reset vout for fresh reading
+  vout = 0.0;
+  
+  // Read and average multiple samples for precision (reduced to 100 for efficiency)
+  for(int i = 0; i < 100; i++) 
   {
-    vout = (vout + (resADC * analogRead(currentPin)));
-    delayMicroseconds(100);
+    vout += (resADC * analogRead(currentPin));
+    delayMicroseconds(50); // Reduced delay
   }
-  // Get vout in mv
-  vout = vout /1000;
-  // vout = resADC * analogRead(currentPin);
+  
+  // Get average vout
+  vout = vout / 100.0;
   
   // Convert vout into current using Scale Factor
-  current = (vout - zeroPoint)/ sensitivityFactor;    
-  current = current - floor(current)*0.02;  
-  if(current < 0) current = 0; 
-
+  current = (vout - zeroPoint) / sensitivityFactor;    
+  
+  // Apply calibration offset correction
+  current = current - (floor(current) * 0.02);  
+  
+  // Ensure non-negative current (absolute value for AC/DC)
+  current = abs(current);
+  
+  // Apply minimum threshold to filter noise
+  if(current < 0.05) current = 0.0; 
 
   return current;                
 } 

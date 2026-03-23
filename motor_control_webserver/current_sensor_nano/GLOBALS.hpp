@@ -15,6 +15,7 @@ constexpr double sensitivityFactor = 0.1;       // ACS712-20A: 100mV/A = 0.1V/A
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PC817A Voltage Sensor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 constexpr int8_t voltagePin1 = A0;              // System voltage monitoring
+// constexpr int8_t voltagePin2 = A2;
 constexpr double resADC = 0.0717;               // Calibrated ADC resolution for voltage divider
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Buzzer Configuration ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -38,19 +39,42 @@ PC817A voltMeter1(voltagePin1, resADC);
 // Interface objects
 buzzer buzz(buzzPin);
 
-// UART data structure imported from UART.hpp
+// --- New Robust Communication Protocol ---
+constexpr uint8_t SOF_BYTE = 0xAA; // Start of Frame
+constexpr uint8_t EOF_BYTE = 0x55; // End of Frame
+
+#pragma pack(push, 1)
+struct UARTPacket {
+    uint8_t sof;
+    MotorCharacteristicsData data;
+    uint8_t checksum;
+    uint8_t eof;
+};
+#pragma pack(pop)
+// --- End of Protocol Definition ---
 
 // Global data instance
 MotorCharacteristicsData data;
 
-// UART transmission function
-void sendData() {
-    // Serialize the struct data into a buffer
-    uint8_t buffer[sizeof(data)];
-    memcpy(buffer, &data, sizeof(data));
+// --- Updated UART Transmission Function ---
+uint8_t calculateChecksum(const MotorCharacteristicsData& data_struct) {
+    const uint8_t* bytes = reinterpret_cast<const uint8_t*>(&data_struct);
+    uint8_t checksum = 0;
+    for (size_t i = 0; i < sizeof(data_struct); ++i) {
+        checksum ^= bytes[i];
+    }
+    return checksum;
+}
 
-    // Send the serialized data over serial
-    Serial.write(buffer, sizeof(buffer));
+void sendData() {
+    UARTPacket packet;
+    packet.sof = SOF_BYTE;
+    packet.data = data; // Copy global data into packet
+    packet.checksum = calculateChecksum(packet.data);
+    packet.eof = EOF_BYTE;
+
+    // Send the entire packet over serial
+    Serial.write(reinterpret_cast<uint8_t*>(&packet), sizeof(packet));
 }
 
 // Debug print function (memory optimized)

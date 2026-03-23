@@ -142,7 +142,7 @@ void checkWiFiModeButton() {
 void addMotorControlAPI() {
     WebServer* server = webServer.getServer();
     
-    // Motor status endpoint - replaces WebSocket status updates
+    // Motor status endpoint - provides real-time data via HTTP polling
     server->on("/api/motor/status", HTTP_GET, [server]() {
         DynamicJsonDocument doc = dataCollector.getAllData();
         String response;
@@ -396,8 +396,29 @@ void setup() {
             Serial.printf("🌐 Web Interface: http://%s\n", localIP.c_str());
         } else {
             Serial.println("❌ WiFi connection failed!");
-            Serial.println("💡 Consider enabling AP mode for field operation");
-            return;
+            Serial.println("🔄 Automatically switching to AP mode for field operation...");
+            Serial.println("📝 This change will be remembered for next boot");
+            
+            // Switch to AP mode automatically and save to NVS
+            saveWiFiMode(true);  // Save AP mode to NVS for persistence
+            currentUseAPMode = true;
+            
+            // Start AP mode immediately
+            Serial.println("🌐 Starting WiFi Access Point mode...");
+            Serial.printf("SSID: %s\n", AP_SSID);
+            Serial.printf("Password: %s\n", AP_PASSWORD);
+            
+            if (webServer.startAccessPoint(AP_SSID, AP_PASSWORD, AP_IP, AP_GATEWAY, AP_SUBNET)) {
+                localIP = WiFi.softAPIP().toString();
+                Serial.println("✅ Access Point started successfully!");
+                Serial.printf("📱 Connect to WiFi: %s\n", AP_SSID);
+                Serial.printf("🔒 Password: %s\n", AP_PASSWORD);
+                Serial.printf("🌐 Web Interface: http://%s\n", localIP.c_str());
+                Serial.println("📍 Perfect for field operation - no internet required!");
+            } else {
+                Serial.println("❌ Failed to start Access Point! System halted.");
+                return;
+            }
         }
     }
     
@@ -449,11 +470,11 @@ void setup() {
     }
     Serial.println("✓ Web server initialized on Core 1");
     
-    // Add delay before WebSocket initialization to ensure TCPIP stack is ready
+    // Add delay to ensure network stack is ready
     delay(500);
     
-    // WebSocket functionality replaced with simple HTTP polling
-    Serial.println("✓ Using HTTP polling instead of WebSocket for better stability");
+    // Using HTTP polling for better stability and field operation reliability
+    Serial.println("✓ HTTP polling enabled for real-time updates");
     
     // Initialize Data Collector (Core 1 - Data Processing) - AFTER network setup
     dataCollector.begin();
@@ -492,13 +513,35 @@ void loop() {
     // Check for physical WiFi mode button presses
     checkWiFiModeButton();
     
-    // Check WiFi connection and attempt reconnection if needed (only in Station mode)
+    // Check WiFi connection and send status updates to Arduino
     static unsigned long lastWiFiCheck = 0;
-    if (millis() - lastWiFiCheck > 30000) { // Check every 30 seconds
+    static int failedReconnectAttempts = 0;
+    
+    if (millis() - lastWiFiCheck > 10000) { // Check every 10 seconds
         if (!currentUseAPMode && WiFi.status() != WL_CONNECTED) {
-            Serial.println("WiFi disconnected, attempting reconnection...");
-            WiFi.reconnect();
+            failedReconnectAttempts++;
+            Serial.printf("WiFi disconnected (attempt %d/3), checking connection...\n", failedReconnectAttempts);
+            
+            if (failedReconnectAttempts <= 3) {
+                WiFi.reconnect();
+            } else {
+                Serial.println("❌ Station mode failed after 3 attempts!");
+                Serial.println("🔄 Automatically switching to AP mode for field operation...");
+                switchWiFiMode(true); // Switch to AP mode and restart
+                return;
+            }
+        } else if (!currentUseAPMode && WiFi.status() == WL_CONNECTED) {
+            // Reset failure counter when successfully connected
+            if (failedReconnectAttempts > 0) {
+                Serial.println("✅ WiFi reconnected successfully!");
+                failedReconnectAttempts = 0;
+            }
         }
+        
+        // Send periodic WiFi strength to Arduino for OLED status bar
+        int currentRSSI = currentUseAPMode ? -50 : WiFi.RSSI(); // Use fixed value for AP mode
+        currentSensor.sendWiFiStrength(currentRSSI);
+        
         lastWiFiCheck = millis();
     }
     

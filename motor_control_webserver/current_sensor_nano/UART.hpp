@@ -37,6 +37,10 @@ char wifiMode = 'U';  // U=Unknown, A=AP Mode (Field), S=Station Mode (Home/Offi
 bool wifiModeReceived = false;
 char wifiModeIP[16] = "";
 
+// WiFi strength information (0-4 bars)
+int wifiStrength = 0;
+bool wifiStrengthReceived = false;
+
 // Display mode: 0=Normal (Power), 1=IP Only, 2=WiFi Mode + IP
 uint8_t displayMode = 0;
 
@@ -107,6 +111,26 @@ void handleWiFiModeReception() {
     }
 }
 
+// Function to handle WiFi strength reception
+void handleWiFiStrengthReception() {
+    while (Serial.available() > 0) {
+        char inChar = Serial.read();
+        
+        if (inChar == '\n' || inChar == '\r') {
+            return;
+        } else if (inChar >= '0' && inChar <= '4') {
+            // Valid WiFi strength value (0-4)
+            wifiStrength = inChar - '0';
+            wifiStrengthReceived = true;
+            
+            Serial.print(F("WiFi Strength: "));
+            Serial.print(wifiStrength);
+            Serial.println(F("/4 bars"));
+            return;
+        }
+    }
+}
+
 // Function to handle incoming UART commands
 void handleUARTCommands() {
     if (Serial.available() > 0) {
@@ -124,6 +148,13 @@ void handleUARTCommands() {
             // WiFi Mode command - consume the 'M' and handle mode reception
             Serial.read(); // Consume the 'M'
             handleWiFiModeReception();
+            return;
+        }
+        
+        if (receivedChar == 'W') {
+            // WiFi Strength command - consume the 'W' and handle strength reception
+            Serial.read(); // Consume the 'W'
+            handleWiFiStrengthReception();
             return;
         }
         

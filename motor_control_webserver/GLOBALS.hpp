@@ -14,7 +14,6 @@
 #include "Light.hpp"
 #include "UARTCurrentSensor.hpp"
 #include "WebServerManager.hpp"
-// WebSocket removed - using HTTP polling instead
 #include "DataCollector.hpp"
 
 // WiFi Configuration - Station/Client Mode (connect to existing network)
@@ -30,15 +29,15 @@ const IPAddress AP_SUBNET(255, 255, 255, 0);
 
 // WiFi Mode Selection - Now loaded from NVS (Non-Volatile Storage)
 // Default fallback values if NVS is empty
-const bool DEFAULT_USE_AP_MODE = true;  // Default to field mode for safety
+const bool DEFAULT_USE_AP_MODE = true;  // Default to field mode for safety and reliability
 
 // Global variables for runtime mode switching
 extern bool currentUseAPMode;
 extern Preferences preferences;
 
 // FreeRTOS Core Assignment
-static const BaseType_t app_cpu0 = 0;  // Motor control, current sensing
-static const BaseType_t app_cpu1 = 1;  // Web server, WebSocket, speed calculation
+static const BaseType_t app_cpu0 = 0;  // Motor control, current sensing, hardware operations
+static const BaseType_t app_cpu1 = 1;  // Web server, HTTP API, speed calculation, data processing
 
 // Motor Properties
 const uint32_t frequency = 100000;                            // PWM frequency in Hz
@@ -53,13 +52,13 @@ constexpr gpio_num_t triggerPin1 = GPIO_NUM_19;      // Motor direction control 
 
 // Motor 2 Configuration (matches BLDC_speed_Arduino hardware)
 constexpr uint8_t motorId2 = 2;
-constexpr gpio_num_t feedBackPin2 = GPIO_NUM_15;     // Feedback pulse input (actual hardware)
+constexpr gpio_num_t feedBackPin2 = GPIO_NUM_15;     // Feedback pulse input (GPIO 35 - input only, no boot conflicts)
 constexpr gpio_num_t motorPwmPin2 = GPIO_NUM_14;     // PWM capable pin (actual hardware)
 constexpr gpio_num_t triggerPin2 = GPIO_NUM_23;      // Motor direction control (actual hardware)
 
 // LED Lights Control (via IRF520N MOSFET) - Updated for 2 lights
-constexpr gpio_num_t leftLightPin = GPIO_NUM_27;    // Left LED lights control via IRF520N MOSFET
-constexpr gpio_num_t rightLightPin = GPIO_NUM_4;    // Right LED lights control via IRF520N MOSFET
+constexpr gpio_num_t leftLightPin = GPIO_NUM_17;    // Left LED lights control via IRF520N MOSFET
+constexpr gpio_num_t rightLightPin = GPIO_NUM_16;    // Right LED lights control via IRF520N MOSFET
 
 // 4-Door Solenoid Control (via IRF520N MOSFETs) - REASSIGNED TO AVOID MOTOR PIN CONFLICTS
 constexpr gpio_num_t doorLock1Pin = GPIO_NUM_25;     // Front Left Door via IRF520N
@@ -70,8 +69,8 @@ constexpr gpio_num_t doorLock4Pin = GPIO_NUM_33;     // Rear Right Door via IRF5
 // UART Current Sensor Communication (Arduino Nano via Hardware UART2)
 // ESP32 DevKit V1 UART2 pins: TX=GPIO17, RX=GPIO16 (Hardware UART)
 // Arduino Nano Hardware Serial pins: TX=D1, RX=D0
-constexpr gpio_num_t UART_TX_PIN = GPIO_NUM_17;     // UART2 TX to Arduino Nano RX
-constexpr gpio_num_t UART_RX_PIN = GPIO_NUM_16;     // UART2 RX from Arduino Nano TX
+constexpr gpio_num_t UART_TX_PIN = GPIO_NUM_4;     // UART2 TX to Arduino Nano RX
+constexpr gpio_num_t UART_RX_PIN = GPIO_NUM_5;     // UART2 RX from Arduino Nano TX
 
 // Physical Emergency WiFi Mode Switch Button
 constexpr gpio_num_t WIFI_MODE_BUTTON_PIN = GPIO_NUM_0;  // Boot button (GPIO 0) - built-in on ESP32 DevKit
@@ -93,7 +92,6 @@ extern SingleDoorLock rearRightDoor; // Rear Right Door lock
 extern UARTCurrentSensor currentSensor; // UART communication with Arduino Nano
 
 extern WebServerManager webServer;
-// WebSocket manager removed - using HTTP polling instead
 extern DataCollector dataCollector;
 
 // Task Handles
